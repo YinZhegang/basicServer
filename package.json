@@ -7,6 +7,7 @@
     "serve": "concurrently \"npm:mock\" \"vue-cli-service serve\"",
     "test:unit": "jest --clearCache && vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
+    "lint-fix": "vue-cli-service lint --fix",
     "build:prod": "vue-cli-service build",
     "build:stage": "vue-cli-service build --mode staging",
     "svg": "vsvg -s ./src/icons/svg -t ./src/icons/components --ext ts --es6",

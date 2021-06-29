@@ -245,6 +245,26 @@ export const asyncRoutes: RouteConfig[] = [
     ]
   },
   {
+    path: '/ailink',
+    component: Layout,
+    redirect: '/ailink/list',
+    meta: { title: '爱联络', icon: 'tab' },
+    children: [
+      {
+        path: 'list',
+        component: () => import(/* webpackChunkName: "profile" */ '../modules/ailink/views/ai/List.vue'),
+        name: 'ailist',
+        meta: { title: '爱联络1', icon: 'tab' }
+      },
+      {
+        path: 'list2',
+        component: () => import(/* webpackChunkName: "profile" */ '../modules/ailink/views/ai/List.vue'),
+        name: 'ailist2',
+        meta: { title: '爱联络2', icon: 'tab' }
+      }
+    ]
+  },
+  {
     path: '/tab',
     component: Layout,
     children: [
