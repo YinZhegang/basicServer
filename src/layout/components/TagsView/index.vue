@@ -12,6 +12,7 @@
         v-for="tag in visitedViews"
         ref="tag"
         :key="tag.path"
+        :style="{'background-color': isActive(tag)?theme:'#fff',borderColor: isActive(tag)?theme:'#d8dce5'}"
         :class="isActive(tag) ? 'active' : ''"
         :to="{path: tag.path, query: tag.query, fullPath: tag.fullPath}"
         class="tags-view-item"
@@ -58,6 +59,7 @@ import { RouteConfig } from 'vue-router'
 import { PermissionModule } from '@/store/modules/permission'
 import { TagsViewModule, ITagView } from '@/store/modules/tags-view'
 import ScrollPane from './ScrollPane.vue'
+import { SettingsModule } from '@/store/modules/settings'
 
 @Component({
   name: 'TagsView',
@@ -71,6 +73,9 @@ export default class extends Vue {
   private left = 0
   private selectedTag: ITagView = {}
   private affixTags: ITagView[] = []
+  get theme() {
+    return SettingsModule.theme
+  }
 
   get visitedViews() {
     return TagsViewModule.visitedViews

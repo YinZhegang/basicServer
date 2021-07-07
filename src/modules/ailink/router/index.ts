@@ -9,7 +9,7 @@
  */
 import { RouteConfig } from 'vue-router'
 
-const aiRoute: RouteConfig = 
+const aiRoute: RouteConfig =
   {
     path: '/ailink',
     name: 'ailink',

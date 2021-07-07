@@ -9,6 +9,8 @@ import componentsRouter from './modules/components'
 import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
 import nestedRouter from './modules/nested'
+import ucenterRoutes from './modules/ucenter'
+import authRoutes from './modules/auth'
 
 Vue.use(VueRouter)
 
@@ -72,6 +74,7 @@ export const constantRoutes: RouteConfig[] = [
     component: () => import(/* webpackChunkName: "401" */ '@/views/error-page/401.vue'),
     meta: { hidden: true }
   },
+
   {
     path: '/',
     component: Layout,
@@ -89,6 +92,8 @@ export const constantRoutes: RouteConfig[] = [
       }
     ]
   },
+  ucenterRoutes,
+  authRoutes,
   // {
   //   path: '/documentation',
   //   component: Layout,
@@ -241,26 +246,6 @@ export const asyncRoutes: RouteConfig[] = [
           title: 'articleList',
           icon: 'list'
         }
-      }
-    ]
-  },
-  {
-    path: '/ailink',
-    component: Layout,
-    redirect: '/ailink/list',
-    meta: { title: '爱联络', icon: 'tab' },
-    children: [
-      {
-        path: 'list',
-        component: () => import(/* webpackChunkName: "profile" */ '../modules/ailink/views/ai/List.vue'),
-        name: 'ailist',
-        meta: { title: '爱联络1', icon: 'tab' }
-      },
-      {
-        path: 'list2',
-        component: () => import(/* webpackChunkName: "profile" */ '../modules/ailink/views/ai/List.vue'),
-        name: 'ailist2',
-        meta: { title: '爱联络2', icon: 'tab' }
       }
     ]
   },

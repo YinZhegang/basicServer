@@ -1,3 +1,12 @@
+/*
+ * @Author: yinzhegang
+ * @Date: 2021-06-03 09:57:20
+ * @LastEditTime: 2021-07-06 15:39:55
+ * @LastEditors: yinzhegang
+ * @Description:
+ * @FilePath: \basicServes\src\main.ts
+ * 可以输入预定的版权声明、个性签名、空行等
+ */
 import Vue, { DirectiveOptions } from 'vue'
 
 import 'normalize.css'
@@ -18,6 +27,9 @@ import '@/utils/error-log'
 import '@/pwa/register-service-worker'
 import * as directives from '@/directives'
 import * as filters from '@/filters'
+import BlTable from './components/BlTable'
+
+Vue.component('bl-table', BlTable)
 
 Vue.use(ElementUI, {
   size: AppModule.size, // Set element-ui default size

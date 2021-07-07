@@ -1,3 +1,12 @@
+<!--
+ * @Author: yinzhegang
+ * @Date: 2021-06-03 09:57:20
+ * @LastEditTime: 2021-07-07 00:01:25
+ * @LastEditors: yinzhegang
+ * @Description:
+ * @FilePath: \basicServes\src\layout\components\AppMain.vue
+ * 可以输入预定的版权声明、个性签名、空行等
+-->
 <template>
   <section class="app-main">
     <transition
@@ -36,6 +45,7 @@ export default class extends Vue {
   width: 100%;
   position: relative;
   overflow: hidden;
+  padding: 20px;
 }
 
 .fixed-header+.app-main {

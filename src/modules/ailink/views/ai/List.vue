@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-06-04 16:22:48
- * @LastEditTime: 2021-06-07 16:00:04
+ * @LastEditTime: 2021-07-06 15:47:53
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\modules\ailink\views\ai\List.vue
@@ -9,7 +9,17 @@
 -->
 <template>
   <div>
-      test
+      <el-table :data='data'>
+        <el-table-column
+          prop="name"
+          label="姓名"
+          width="180" />
+          <el-table-column
+          prop="name"
+          label="姓名"
+          width="180" />
+
+      </el-table>
   </div>
 </template>
 
@@ -17,7 +27,12 @@
 import { Vue, Component } from 'vue-property-decorator'
 
 @Component({
-  name: 'Ailist'
+  name: 'Ailist',
+  data() {
+    return {
+      data: [{ name: 12 }]
+    }
+  }
 })
 export default class List extends Vue {
 
