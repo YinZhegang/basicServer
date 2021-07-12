@@ -1,8 +1,8 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-07 17:13:25
- * @LastEditors: yinzhegang
+ * @LastEditTime: 2021-07-11 15:46:28
+ * @LastEditors: Please set LastEditors
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\person\index.vue
  * 可以输入预定的版权声明、个性签名、空行等
@@ -54,24 +54,45 @@
         </el-form-item>
       </el-form>
       <el-popover
-        style="float: right; overflow: hidden;margin-left:10px"
+        style="float: right; overflow: hidden; margin-left: 10px"
         placement="bottom"
         title="列表字段展示设置"
         width="200"
         trigger="click"
       >
         <el-checkbox-group v-model="params.type">
-            <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-            <el-checkbox label="地推活动" name="type"></el-checkbox>
-            <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-            <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
+          <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
+          <el-checkbox label="地推活动" name="type"></el-checkbox>
+          <el-checkbox label="线下主题活动" name="type"></el-checkbox>
+          <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
         </el-checkbox-group>
-        <el-button type="text" slot="reference"><i class="el-icon-more"></i></el-button>
+        <el-button type="text" slot="reference"
+          ><i class="el-icon-more"></i
+        ></el-button>
       </el-popover>
       <el-button-group style="float: right; overflow: hidden">
-        <el-button size="small" type="primary" icon="el-icon-plus"
+        <el-button
+          size="small"
+          type="primary"
+          icon="el-icon-plus"
+          @click="outerVisible = true"
           >新增人员</el-button
         >
+        <el-dialog title="外层 Dialog" :visible.sync="outerVisible">
+          <el-dialog
+            width="30%"
+            title="内层 Dialog"
+            :visible.sync="innerVisible"
+            append-to-body
+          >
+          </el-dialog>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="outerVisible = false">取 消</el-button>
+            <el-button type="primary" @click="innerVisible = true"
+              >打开内层 Dialog</el-button
+            >
+          </div>
+        </el-dialog>
         <el-button size="small" type="primary" icon="el-icon-edit"
           >编辑</el-button
         >
@@ -87,7 +108,7 @@
       <el-table
         v-loading="loading"
         border
-         stripe
+        stripe
         size="small"
         :header-cell-style="{
           background: '#f7f8f9',
@@ -196,6 +217,9 @@ export default class extends Vue {
     children: 'children',
     label: 'label'
   };
+
+  outerVisible = false;
+  innerVisible = false;
 }
 </script>
 
