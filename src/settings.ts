@@ -1,3 +1,12 @@
+/*
+ * @Author: yinzhegang
+ * @Date: 2021-06-03 09:57:20
+ * @LastEditTime: 2021-07-12 13:51:53
+ * @LastEditors: yinzhegang
+ * @Description: 
+ * @FilePath: \basicServes\src\settings.ts
+ * 可以输入预定的版权声明、个性签名、空行等
+ */
 interface ISettings {
   title: string // Overrides the default title
   showSettings: boolean // Controls settings panel display
@@ -12,11 +21,11 @@ interface ISettings {
 
 // You can customize below settings :)
 const settings: ISettings = {
-  title: 'Vue Typescript Admin',
+  title: '基础服务',
   showSettings: true,
   showTagsView: true,
   fixedHeader: false,
-  showSidebarLogo: false,
+  showSidebarLogo: true,
   errorLog: ['production'],
   sidebarTextTheme: true,
   devServerPort: 9527,

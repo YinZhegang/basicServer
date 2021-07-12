@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-06-03 09:57:20
- * @LastEditTime: 2021-07-07 15:09:44
+ * @LastEditTime: 2021-07-12 11:16:07
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\App.vue
@@ -29,5 +29,6 @@ export default class extends Vue {}
 <style lang="scss">
  .el-dialog__header{
   border-bottom: 1px solid #EBEEF5;
+  padding: 15px;
 }
 </style>
