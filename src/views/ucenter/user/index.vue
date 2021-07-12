@@ -139,8 +139,8 @@
           <el-checkbox label="创建者" name="type"></el-checkbox>
           <el-checkbox label="创建时间" name="type"></el-checkbox>
         </el-checkbox-group>
-        <el-button type="text" slot="reference"
-          ><i class="el-icon-more"></i
+        <el-button type="text" slot="reference">
+          <i class="el-icon-more"></i
         ></el-button>
       </el-popover>
       <el-button-group>
