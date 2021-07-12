@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-07 17:13:16
+ * @LastEditTime: 2021-07-12 17:16:48
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\group\index.vue
@@ -51,14 +51,14 @@
       </el-form>
 
       <el-button-group style="float: right; overflow: hidden">
-        <el-button size="small" type="primary" icon="el-icon-plus"
-          >新增用户组</el-button
+        <el-button-func size="small" icon="el-icon-plus"
+          >新增用户组</el-button-func
         >
-        <el-button size="small" type="primary" icon="el-icon-edit"
-          >编辑</el-button
+        <el-button-func size="small" icon="el-icon-edit"
+          >编辑</el-button-func
         >
-        <el-button size="small" type="primary" icon="el-icon-delete"
-          >删除</el-button
+        <el-button-func size="small" icon="el-icon-delete"
+          >删除</el-button-func
         >
       </el-button-group>
 

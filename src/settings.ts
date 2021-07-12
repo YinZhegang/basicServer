@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-06-03 09:57:20
- * @LastEditTime: 2021-07-12 13:51:53
+ * @LastEditTime: 2021-07-12 16:43:15
  * @LastEditors: yinzhegang
  * @Description: 
  * @FilePath: \basicServes\src\settings.ts
@@ -22,7 +22,7 @@ interface ISettings {
 // You can customize below settings :)
 const settings: ISettings = {
   title: '基础服务',
-  showSettings: true,
+  showSettings: false,
   showTagsView: true,
   fixedHeader: false,
   showSidebarLogo: true,

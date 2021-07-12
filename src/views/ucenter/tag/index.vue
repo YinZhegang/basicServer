@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-07 15:36:18
+ * @LastEditTime: 2021-07-12 17:17:51
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\tag\index.vue
@@ -10,14 +10,14 @@
 <template>
     <div>
         <el-button-group style="float: right; overflow: hidden">
-        <el-button size="small" type="primary" icon="el-icon-plus"
-          >新增标签</el-button
+        <el-button-func class="hover-primary" size="small" icon="el-icon-plus"
+          >新增标签</el-button-func
         >
-        <el-button size="small" type="primary" icon="el-icon-edit"
-          >编辑</el-button
+        <el-button-func size="small" icon="el-icon-edit"
+          >编辑</el-button-func
         >
-        <el-button size="small" type="primary" icon="el-icon-delete"
-          >删除</el-button
+        <el-button-func size="small" icon="el-icon-delete"
+          >删除</el-button-func
         >
       </el-button-group>
       <br>

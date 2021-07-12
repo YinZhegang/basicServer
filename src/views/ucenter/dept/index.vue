@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-12 14:19:23
+ * @LastEditTime: 2021-07-12 17:15:53
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -9,13 +9,12 @@
 -->
 <template>
   <div>
-    <el-button
+    <el-button-func
       size="small"
       style="float: right; cursor: pointer"
-      type="primary"
       icon="el-icon-plus"
       @click="showDialog('新增部门', '', '')"
-      >新增部门</el-button
+      >新增部门</el-button-func
     >
     <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="50%">
       <el-form

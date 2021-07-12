@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-07 14:43:01
+ * @LastEditTime: 2021-07-12 17:17:06
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dict\index.vue
@@ -9,8 +9,8 @@
 -->
 <template>
     <div>
-         <el-button size="small" style="float:right" type="primary" icon="el-icon-plus"
-          >新增字段</el-button
+         <el-button-func size="small" style="float:right" icon="el-icon-plus"
+          >新增字段</el-button-func
         >
         <br>
          <br>

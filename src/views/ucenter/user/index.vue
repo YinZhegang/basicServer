@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-07 17:11:25
+ * @LastEditTime: 2021-07-12 17:13:47
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\user\index.vue
@@ -144,16 +144,16 @@
         ></el-button>
       </el-popover>
       <el-button-group>
-        <el-button  size="small" type="primary" icon="el-icon-plus"
-          >新增人员</el-button
+        <el-button-func  size="small"  icon="el-icon-plus"
+          >新增人员</el-button-func
         >
-        <el-button  size="small" type="primary" icon="el-icon-edit"
-          >编辑</el-button
+        <el-button-func  size="small"  icon="el-icon-edit"
+          >编辑</el-button-func
         >
          </el-button-group>
          <el-divider direction="vertical"></el-divider>
-        <el-button  size="small" type="primary" icon="el-icon-delete"
-          >删除</el-button
+        <el-button-func  size="small" icon="el-icon-delete"
+          >删除</el-button-func
         >
 
       <!-- 数据列表 -->

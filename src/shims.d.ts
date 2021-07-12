@@ -1,9 +1,9 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-06-03 09:57:20
- * @LastEditTime: 2021-07-06 15:40:56
+ * @LastEditTime: 2021-07-12 17:02:23
  * @LastEditors: yinzhegang
- * @Description:
+ * @Description: 
  * @FilePath: \basicServes\src\shims.d.ts
  * 可以输入预定的版权声明、个性签名、空行等
  */
@@ -28,3 +28,5 @@ declare module 'vue2-dropzone'
 
 // TODO: remove this part after vue-image-crop-upload has its typescript file
 declare module 'vue-image-crop-upload'
+
+declare module 'vue2-dropzone'

@@ -1,8 +1,8 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-11 15:46:28
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-12 17:14:25
+ * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\person\index.vue
  * 可以输入预定的版权声明、个性签名、空行等
@@ -71,12 +71,11 @@
         ></el-button>
       </el-popover>
       <el-button-group style="float: right; overflow: hidden">
-        <el-button
+        <el-button-func
           size="small"
-          type="primary"
           icon="el-icon-plus"
           @click="outerVisible = true"
-          >新增人员</el-button
+          >新增人员</el-button-func
         >
         <el-dialog title="外层 Dialog" :visible.sync="outerVisible">
           <el-dialog
@@ -93,14 +92,14 @@
             >
           </div>
         </el-dialog>
-        <el-button size="small" type="primary" icon="el-icon-edit"
-          >编辑</el-button
+        <el-button-func size="small" icon="el-icon-edit"
+          >编辑</el-button-func
         >
-        <el-button size="small" type="primary" icon="el-icon-delete"
-          >删除</el-button
+        <el-button-func size="small" icon="el-icon-delete"
+          >删除</el-button-func
         >
-        <el-button size="small" type="primary" icon="el-icon-upload2"
-          >批量导入</el-button
+        <el-button-func size="small" icon="el-icon-upload2"
+          >批量导入</el-button-func
         >
       </el-button-group>
 

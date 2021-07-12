@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-06-03 09:57:20
- * @LastEditTime: 2021-07-06 15:39:55
+ * @LastEditTime: 2021-07-12 17:04:41
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\main.ts
@@ -27,9 +27,9 @@ import '@/utils/error-log'
 import '@/pwa/register-service-worker'
 import * as directives from '@/directives'
 import * as filters from '@/filters'
-import BlTable from './components/BlTable'
+import ElButtonFunc from './components/El-button-func/index.vue'
 
-Vue.component('bl-table', BlTable)
+Vue.component('el-button-func', ElButtonFunc)
 
 Vue.use(ElementUI, {
   size: AppModule.size, // Set element-ui default size
