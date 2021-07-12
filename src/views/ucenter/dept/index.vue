@@ -1,8 +1,8 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-11 15:41:40
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-12 14:19:23
+ * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
  * 可以输入预定的版权声明、个性签名、空行等
@@ -248,7 +248,7 @@ export default class extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
 .el-dialog__body {
   padding-top: 0;
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:40:33
- * @LastEditTime: 2021-07-07 00:16:26
+ * @LastEditTime: 2021-07-12 15:04:58
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\router\modules\auth.ts
@@ -24,19 +24,19 @@ const authRoutes: RouteConfig = {
       path: 'role',
       component: () => import(/* webpackChunkName: "dynamic-table" */ '@/views/auth/role/index.vue'),
       name: 'AuthRole',
-      meta: { title: '角色管理' }
+      meta: { title: '角色管理',icon: 'user' }
     },
     {
       path: 'func',
       component: () => import(/* webpackChunkName: "draggable-table" */ '@/views/auth/func/index.vue'),
       name: 'AuthFunc',
-      meta: { title: '功能权限' }
+      meta: { title: '功能权限',icon: 'component' }
     },
     {
       path: 'data',
       component: () => import(/* webpackChunkName: "inline-edit-table" */ '@/views/auth/data/index.vue'),
       name: 'AuthData',
-      meta: { title: '数据权限' }
+      meta: { title: '数据权限',icon: 'documentation' }
     }
   ]
 }
