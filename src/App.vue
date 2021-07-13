@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-06-03 09:57:20
- * @LastEditTime: 2021-07-12 17:06:17
+ * @LastEditTime: 2021-07-13 17:39:19
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\App.vue
@@ -32,10 +32,8 @@ export default class extends Vue {}
   padding: 15px;
 }
 
-// // 默认按钮聚焦和鼠标触碰时显示主题色
-// .el-button--default:hover, .el-button--default:focus{
-//     color: #fff;
-//     border-color: $menuActiveText;
-//     background-color: $menuActiveText;
-// }
+.func-opr{
+  font-size: 16px;
+  cursor: pointer;
+}
 </style>

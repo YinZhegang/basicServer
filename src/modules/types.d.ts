@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-06-29 10:34:36
- * @LastEditTime: 2021-07-13 13:22:32
+ * @LastEditTime: 2021-07-13 13:38:29
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\modules\types.d.ts
@@ -12,5 +12,6 @@ import { DirectiveOptions } from 'vue'
 
 export interface Modules {
     routes: RouteConfig
-    directives: DirectiveOptions
+    directives:   DirectiveOptions
+    filters: Function
   }
