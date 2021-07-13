@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-12 17:14:25
+ * @LastEditTime: 2021-07-13 11:27:19
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\person\index.vue
@@ -9,6 +9,23 @@
 -->
 <template>
   <div class="cont-main">
+      <!-- 添加用户信息 -->
+        <el-dialog title="添加用户" :visible.sync="outerVisible">
+          <el-dialog
+            width="30%"
+            title="内层 Dialog"
+            :visible.sync="innerVisible"
+            append-to-body
+          >
+          </el-dialog>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="outerVisible = false">取 消</el-button>
+            <el-button type="primary" @click="innerVisible = true"
+              >打开内层 Dialog</el-button
+            >
+          </div>
+        </el-dialog>
+
     <div class="cont-left">
       <el-input
         size="mini"
@@ -61,10 +78,10 @@
         trigger="click"
       >
         <el-checkbox-group v-model="params.type">
-          <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-          <el-checkbox label="地推活动" name="type"></el-checkbox>
-          <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-          <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
+          <el-checkbox label="姓名" name="type"></el-checkbox>
+          <el-checkbox label="手机号" name="type"></el-checkbox>
+          <el-checkbox label="工号" name="type"></el-checkbox>
+          <el-checkbox label="所属部门" name="type"></el-checkbox>
         </el-checkbox-group>
         <el-button type="text" slot="reference"
           ><i class="el-icon-more"></i
@@ -77,21 +94,7 @@
           @click="outerVisible = true"
           >新增人员</el-button-func
         >
-        <el-dialog title="外层 Dialog" :visible.sync="outerVisible">
-          <el-dialog
-            width="30%"
-            title="内层 Dialog"
-            :visible.sync="innerVisible"
-            append-to-body
-          >
-          </el-dialog>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="outerVisible = false">取 消</el-button>
-            <el-button type="primary" @click="innerVisible = true"
-              >打开内层 Dialog</el-button
-            >
-          </div>
-        </el-dialog>
+
         <el-button-func size="small" icon="el-icon-edit"
           >编辑</el-button-func
         >
