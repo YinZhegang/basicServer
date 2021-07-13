@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-13 10:56:38
+ * @LastEditTime: 2021-07-13 18:21:56
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\user\index.vue
@@ -10,14 +10,16 @@
 <template>
   <div class="cont-main">
     <el-dialog title="新增用户" :visible.sync="addUser.visible" width="50%">
-      <el-steps :active="1" simple direction="horizontal">
-        <el-step title="填写基本信息" icon="el-icon-edit"></el-step>
+      <el-steps :active="steps" simple direction="horizontal">
+        <el-step title="填写基本信息" icon="el-icon-edit">
+        </el-step>
         <el-step title="选择所属部门" icon="el-icon-s-home"></el-step>
         <el-step title="选择所属用户组" icon="el-icon-s-custom"></el-step>
       </el-steps>
       <br />
       <br />
       <el-form
+        v-if="steps===1"
         style="width: 50%; margin: 0 auto"
         :rules="addUserFromRules"
         size="small"
@@ -38,9 +40,13 @@
             <el-button  style="padding:5px 10px" icon="el-icon-plus" size="mini"></el-button>
         </el-form-item>
       </el-form>
+      <chooseDept v-if="steps===2"></chooseDept>
+      <chooseDept v-if="steps===3"></chooseDept>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addUser.visible = false">取 消</el-button>
-        <el-button type="primary" @click="addUser.visible = false"
+        <el-button type="primary" @click="() => {
+            steps += 1
+            }"
           >下一步</el-button
         >
       </span>
@@ -194,9 +200,13 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 
 @Component({
-  name: 'user'
+  name: 'user',
+  components: {
+    chooseDept: () => import('@/components/ChooseItems/content.vue')
+  }
 })
 export default class extends Vue {
+    steps =1
   activeName = 'first';
   input = '';
   list = [{ activName: 11 }, { activName: 11 }, { activName: 11 }];
@@ -299,4 +309,5 @@ export default class extends Vue {
 .el-steps--simple {
   background: #fff;
 }
+
 </style>
