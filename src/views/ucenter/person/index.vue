@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-13 17:43:03
+ * @LastEditTime: 2021-07-14 14:21:51
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\person\index.vue
@@ -10,9 +10,24 @@
 <template>
   <div class="cont-main">
     <choose-member title="选择部门" :visible.sync="detpVisible"></choose-member>
+    <!-- 重置密码弹框 -->
+    <el-dialog title="重置密码" :visible.sync="resetVisible">
+        <el-form   size="small"
+            label-width="80px" :model="resetForm">
+            <el-form-item prop="name" label="用户名">
+                zhangsang
+            </el-form-item>
+            <el-form-item label="新密码" prop="psw">
+               <el-input type="password" v-model="resetForm.psw" placeholder="请输入6-30位数字与字母结合的密码" />
+            </el-form-item>
+            <el-form-item label="确认密码" prop="pswc">
+               <el-input type="password" v-model="resetForm.pswc" placeholder="请输入6-30位数字与字母结合的密码" />
+            </el-form-item>
+        </el-form>
+    </el-dialog>
     <!-- 添加用户信息 -->
     <el-dialog title="新增人员" :visible.sync="outerVisible">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs v-model="activeName">
         <el-tab-pane label="基本信息" name="first">
           <el-form
             size="small"
@@ -119,8 +134,8 @@
               label="操作"
             >
               <template>
-                 <i class="el-icon-setting func-opr" style="cursor: pointer"></i>
-                    <el-divider direction="vertical"></el-divider>
+                 <i @click="resetVisible = true" class="el-icon-setting func-opr" style="cursor: pointer"></i>
+                    <el-divider  direction="vertical"></el-divider>
                     <i class="el-icon-edit func-opr" style="cursor: pointer"></i>
                     <el-divider direction="vertical"></el-divider>
                     <i class="el-icon-delete func-opr" style="cursor: pointer"></i>
@@ -260,16 +275,16 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
 @Component({
   name: 'person',
   components: {
-    ChooseMember: () => import('@/components/ChooseItems')
+    ChooseMember: () => import('@/components/ChooseItems/index.vue')
   }
 })
 export default class extends Vue {
   baseModel = {};
-
+  resetForm ={}
   detpVisible = false;
   activeName = 'first';
   input = '';
-  list = [{}];
+  list = [{ activName: 1 }];
   loading = false;
   params = {
     current: 0,
@@ -277,6 +292,7 @@ export default class extends Vue {
     type: []
   };
 
+  resetVisible =false
   total = 10;
 
   data: any = [

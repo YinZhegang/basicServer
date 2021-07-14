@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-13 18:21:56
+ * @LastEditTime: 2021-07-14 14:07:38
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\user\index.vue
@@ -36,8 +36,22 @@
           <el-input type="password" v-model="addUserFrom.name"></el-input>
         </el-form-item>
         <el-form-item label="角色">
-            <el-tag size="small" style="margin:0 2px 2px 0" closable :key="i" v-for="i in 12">用户{{i}}</el-tag>
-            <el-button  style="padding:5px 10px" icon="el-icon-plus" size="mini"></el-button>
+             <el-select
+                v-model="addUserFrom.value"
+                multiple
+                filterable
+                remote
+                reserve-keyword
+                placeholder="请输入关键词"
+                :remote-method="() => {}"
+                :loading="loading">
+                <el-option
+                v-for="item in [{value: '11',label: '角色1'},{value: '角色2',label: '角色2'}]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+                </el-option>
+            </el-select>
         </el-form-item>
       </el-form>
       <chooseDept v-if="steps===2"></chooseDept>

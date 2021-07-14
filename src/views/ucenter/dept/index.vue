@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-12 17:15:53
+ * @LastEditTime: 2021-07-14 14:24:44
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -9,6 +9,7 @@
 -->
 <template>
   <div>
+      <choose-member title="选择部门" :visible.sync="detpVisible"></choose-member>
     <el-button-func
       size="small"
       style="float: right; cursor: pointer"
@@ -18,29 +19,30 @@
     >
     <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="50%">
       <el-form
+      size="small"
         :model="ruleForm"
         ref="ruleForm"
-        label-width="100px"
+        label-width="80px"
+        style="width:50%;margin:0 auto"
         class="demo-ruleForm"
       >
         <el-form-item label="部门名称" prop="department">
           <el-input
             v-model="ruleForm.department"
             placeholder="请输入部门名称"
-            @focus="showCheckDialog"
+
           ></el-input>
         </el-form-item>
         <el-form-item label="上级部门" prop="ParentName">
-          <el-input
-            v-model="ruleForm.ParentName"
-            placeholder="请选择上级部门"
-            @focus="showCheckDialog"
-          ></el-input>
+            <el-button icon="el-icon-edit" type="primary" plain @click="detpVisible = true">研发部</el-button>
         </el-form-item>
-        <el-button type="primary" @click="dialogVisible = false"
+        <el-form-item>
+          <el-button type="primary" @click="dialogVisible = false"
           >保存</el-button
         >
         <el-button @click="dialogVisible = false">取 消</el-button>
+        </el-form-item>
+
       </el-form>
     </el-dialog>
     <el-dialog title="选择部门" :visible.sync="checkDialogVisible" width="50%">
@@ -144,10 +146,12 @@ import DeptBlock from '@/components/DeptBlock/index.vue'
 @Component({
   name: 'dept',
   components: {
-    DeptBlock
+    DeptBlock,
+    ChooseMember: () => import('@/components/ChooseItems/index.vue')
   }
 })
 export default class extends Vue {
+    detpVisible = false
   tableData = [
     {
       id: 1,
