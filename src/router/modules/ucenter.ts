@@ -24,37 +24,37 @@ const ucenterRoutes: RouteConfig = {
       path: 'person',
       component: () => import(/* webpackChunkName: "dynamic-table" */ '@/views/ucenter/person/index.vue'),
       name: 'UcenterPerson',
-      meta: { title: '人员管理',icon: 'user' }
+      meta: { title: '人员管理', icon: 'user' }
     },
     {
       path: 'user',
       component: () => import(/* webpackChunkName: "draggable-table" */ '@/views/ucenter/user/index.vue'),
       name: 'UcenterUser',
-      meta: { title: '用户管理',icon: 'user' }
+      meta: { title: '用户管理', icon: 'user' }
     },
     {
       path: 'dept',
       component: () => import(/* webpackChunkName: "inline-edit-table" */ '@/views/ucenter/dept/index.vue'),
       name: 'UcenterDept',
-      meta: { title: '部门管理',icon:'tree' }
+      meta: { title: '部门管理', icon: 'tree' }
     },
     {
       path: 'group',
       component: () => import(/* webpackChunkName: "complex-table" */ '@/views/ucenter/group/index.vue'),
       name: 'UcenterGroup',
-      meta: { title: '用户组管理',icon:'peoples' }
+      meta: { title: '用户组管理', icon: 'peoples' }
     },
     {
       path: 'dict',
       component: () => import(/* webpackChunkName: "complex-table" */ '@/views/ucenter/dict/index.vue'),
       name: 'UcenterDict',
-      meta: { title: '业务字典',icon:'form' }
+      meta: { title: '业务字典', icon: 'form' }
     },
     {
       path: 'tag',
       component: () => import(/* webpackChunkName: "complex-table" */ '@/views/ucenter/tag/index.vue'),
       name: 'UcenterTag',
-      meta: { title: '标签管理',icon:'tab' }
+      meta: { title: '标签管理', icon: 'tab' }
     }
   ]
 }

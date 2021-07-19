@@ -12,6 +12,6 @@ import { DirectiveOptions } from 'vue'
 
 export interface Modules {
     routes: RouteConfig
-    directives:   DirectiveOptions
+    directives: DirectiveOptions
     filters: Function
   }

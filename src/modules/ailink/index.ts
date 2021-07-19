@@ -7,12 +7,12 @@
  * @FilePath: \basicServes\src\modules\ailink\index.ts
  * 可以输入预定的版权声明、个性签名、空行等
  */
-import aiRoute from "./router";
+import aiRoute from './router'
 import * as directives from '@/directives'
 import * as filters from '@/filters'
 
 export default {
-    routes: aiRoute,
-    directives,
-    filters
+  routes: aiRoute,
+  directives,
+  filters
 }

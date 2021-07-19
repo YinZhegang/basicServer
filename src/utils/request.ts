@@ -1,4 +1,4 @@
-import axios, {AxiosInstance,AxiosRequestConfig,} from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import { UserModule } from '@/store/modules/user'
 
@@ -28,6 +28,7 @@ const resFunc = (response:any) => {
   // You can change this part for your own usage.
   const res = response.data
   if (res.code !== 20000) {
+    if (res.code === 200) return res.data
     Message({
       message: res.message || 'Error',
       type: 'error',
@@ -64,32 +65,33 @@ const resErrFunc = (error:any) => {
 }
 class Service {
   public instance:AxiosInstance
-  constructor(config:AxiosRequestConfig = {baseURL: process.env.VUE_APP_BASE_API, timeout: 5000}){
+  constructor(config:AxiosRequestConfig = { baseURL: process.env.VUE_APP_BASE_API, timeout: 5000 }) {
     this.instance = axios.create(config)
     this.requestInterceptor()
     this.responseInterceptor()
   }
-  getInstance(){
+
+  getInstance() {
     return this.instance
   }
-  requestInterceptor(reqFn = reqFunc,errFn = reqErrFunc){
+
+  requestInterceptor(reqFn = reqFunc, errFn = reqErrFunc) {
     this.instance.interceptors.request.use(
       reqFn,
       errFn
     )
   }
-  responseInterceptor(resFn:any = resFunc,errFn = resErrFunc){
+
+  responseInterceptor(resFn:any = resFunc, errFn = resErrFunc) {
     this.instance.interceptors.response.use(
       resFn,
-      resErrFunc
+      errFn
     )
   }
-  post(url:string,params:any){
-    return this.instance({url:url,method:'post',params:params})
+
+  post(url:string, params:any) {
+    return this.instance({ url: url, method: 'post', params: params })
   }
-} 
-
-
-
+}
 
 export default Service
