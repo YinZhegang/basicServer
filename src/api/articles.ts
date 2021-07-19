@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from './request'
 import { IArticleData } from './types'
 
 export const defaultArticleData: IArticleData = {
