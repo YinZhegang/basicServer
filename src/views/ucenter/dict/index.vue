@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-19 17:30:53
+ * @LastEditTime: 2021-07-20 10:31:18
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dict\index.vue
@@ -10,7 +10,7 @@
 <template>
   <div>
     <el-dialog :visible.sync="userData.detail.visible" :title="userData.detail.isEdit?'编辑字段':'添加字段'">
-      <el-form size="small" :model="userData.detail.form" label-width="100px">
+      <el-form ref="userAddForm" size="small" :model="userData.detail.form" label-width="100px">
           <el-form-item prop="attrName" label="字段名称">
               <el-input
                 type="text"
@@ -20,10 +20,41 @@
                 show-word-limit
                 />
           </el-form-item>
-           <el-form-item prop="attrType" label="属性类型">
+           <el-form-item prop="attrType" label="字段类型类型">
               <el-select :disabled="userData.detail.isEdit" v-model="userData.detail.form.attrType" placeholder="请选择活动区域">
                   <el-option :key="'userData.detail.form.attrType'+ i" v-for="(i,index) in AttrTypeArr" :label="i" :value="index"></el-option>
               </el-select>
+          </el-form-item>
+          <el-form-item prop="expandValueList" label="字段类型类型">
+              <el-tag
+                :key="tag + index"
+                v-for="(tag,index) in userData.detail.form.expandValueList"
+                closable
+                style="margin:1px"
+                :disable-transitions="false"
+                @close="handleClose(tag)">
+                {{tag}}
+              </el-tag>
+              <el-input
+                  class="input-new-tag"
+                  v-if="expandValueList.inputVisible"
+                  v-model="expandValueList.inputValue"
+                  ref="saveTagInput"
+                  size="small"
+                  @keyup.enter.native="handleInputConfirm"
+                  @blur="handleInputConfirm"
+                />
+               <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加</el-button> 
+          </el-form-item>
+          <el-form-item prop="isNull" label="是否必填">
+              <el-switch :inactive-value="0" :active-value="1" v-model="userData.detail.form.isNull"></el-switch>
+          </el-form-item>
+          <el-form-item prop="isListShow" label="是否必填">
+              <el-switch :inactive-value="1" :active-value="0" v-model="userData.detail.form.isListShow"></el-switch>
+          </el-form-item>
+          <el-form-item>
+              <el-button @click="attrAddMethod('userAddForm')" type="primary">确定</el-button>
+              <el-button>取消</el-button>
           </el-form-item>
       </el-form>
     </el-dialog>
@@ -153,7 +184,7 @@ export default class extends Vue {
       tenantId: 1
     },
     detail:{
-      form:{},
+      form:{expandValueList:[]},
       isEdit:false,
       rules:{},
       visible:false
@@ -180,36 +211,31 @@ export default class extends Vue {
   AttrTypeArr:Array<string> = [
     '默认属性','单行文本', '多行文本','手机号','邮箱','超链接','数字','日期','时间','下拉选择','多项选择','开关'
   ]
-  getAttrType(type:number=0):string{
-    switch(type){
-        case 0:
-        return '默认属性'
-         case 1:
-        return '单行文本'
-         case 2:
-        return '多行文本'
-         case 3:
-        return '手机号'
-         case 4:
-        return '邮箱'
-         case 5:
-        return '超链接'
-          case 6:
-        return '数字'
-          case 7:
-        return '日期'
-          case 8:
-        return '时间'
-          case 9:
-        return '下拉选择'
-          case 10:
-        return '多项选择'
-            case 11:
-        return '开关'
-        default:
-          return ''
-    }
+  expandValueList = {
+    inputVisible: false,
+    inputValue:'',
+   
   }
+  attrAddMethod(ref:string){
+    (<any>this.$refs[ref]).validate((valid:boolean) =>{
+       if(!valid) return
+       console.log((<any>this.userData.detail).form)
+    })
+  }
+  showInput(){
+    this.expandValueList.inputVisible = true;
+        this.$nextTick(() => {
+          this.$refs.saveTagInput.$refs.input.focus();
+        });
+  }
+   handleInputConfirm(){
+        let inputValue = this.expandValueList.inputValue;
+        if (inputValue) {
+          this.userData.detail.form.expandValueList.push(inputValue);
+        }
+        this.expandValueList.inputVisible = false;
+        this.expandValueList.inputValue = '';
+    }
   created() {
     attrList(<AttrListParams>this.userData.params).then((res:any)=>{
       this.userData.list = res.records
@@ -225,4 +251,19 @@ export default class extends Vue {
 </script>
 
 <style>
+el-tag + .el-tag {
+    margin-left: 10px;
+  }
+  .button-new-tag {
+    margin-left: 2px;
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .input-new-tag {
+    width: 90px;
+    margin-left: 10px;
+    vertical-align: bottom;
+  }
 </style>

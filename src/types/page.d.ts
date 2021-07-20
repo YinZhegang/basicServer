@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-12 17:41:35
- * @LastEditTime: 2021-07-19 16:53:03
+ * @LastEditTime: 2021-07-20 09:57:57
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\types\page.d.ts
@@ -48,7 +48,7 @@ export interface ListData <P, LI> {
     loading: boolean
     selections?:Array<LI>
     detail?:{
-      form:LI
+      form:LI|{[paramName: string]: any}
       rules?:{[pname: string]: object|Array<object>}
       visible:boolean
       isEdit:boolean
