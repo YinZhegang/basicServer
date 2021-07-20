@@ -1,12 +1,13 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-19 10:46:33
- * @LastEditTime: 2021-07-19 17:33:13
+ * @LastEditTime: 2021-07-20 10:48:14
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\api\dict.ts
  * 可以输入预定的版权声明、个性签名、空行等
  */
+import { type } from 'node:os'
 import { Params, ListResponse } from '../types/page'
 import request from './request'
 import url from './url'
@@ -30,3 +31,8 @@ export type AttrAddParams = {
 }
 export const attrAdd = (params: AttrAddParams) => request.post(url.attrAdd, params)
 
+export type AttrVerifyParams = {
+    form:1|2
+    tenantId:number
+}
+export const attrVerify = (params: AttrVerifyParams) => request.post(url.attrVerify, params)

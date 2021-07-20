@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-19 13:21:32
- * @LastEditTime: 2021-07-19 16:18:32
+ * @LastEditTime: 2021-07-20 10:47:44
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\api\url.ts
@@ -10,5 +10,6 @@
 const baseUrl = 'http://172.16.20.74:8080'
 export default {
   attrList: `${baseUrl}/attr/list`,
-  attrAdd: `${baseUrl}/attr/add`
+  attrAdd: `${baseUrl}/attr/add`,
+  attrVerify: `${baseUrl}/attr/verify`
 }

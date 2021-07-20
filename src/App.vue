@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-06-03 09:57:20
- * @LastEditTime: 2021-07-13 17:39:19
+ * @LastEditTime: 2021-07-20 12:59:56
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\App.vue
@@ -32,8 +32,4 @@ export default class extends Vue {}
   padding: 15px;
 }
 
-.func-opr{
-  font-size: 16px;
-  cursor: pointer;
-}
 </style>

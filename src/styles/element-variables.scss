@@ -11,7 +11,13 @@ $--color-text-regular: #1f2d3d;
 $--border-color-light: #dfe4ed;
 $--border-color-lighter: #e6ebf5;
 $--table-border: 1px solid#dfe6ec;
-
+.func-opr{
+  font-size: 16px;
+  cursor: pointer;
+}
+.func-opr:hover{
+  color: $--color-primary;
+}
 // Icon font path, required
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
