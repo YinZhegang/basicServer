@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-19 10:46:33
- * @LastEditTime: 2021-07-20 10:48:14
+ * @LastEditTime: 2021-07-21 11:39:07
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\api\dict.ts
@@ -36,3 +36,26 @@ export type AttrVerifyParams = {
     tenantId:number
 }
 export const attrVerify = (params: AttrVerifyParams) => request.post(url.attrVerify, params)
+
+export type AttrUpdateParams = {
+    form?: 1|2
+    tenantId: number
+    attrId:string
+    attrField: string
+    attrName?: string
+    isNull?: 0|1
+    isListShow?: 0|1
+    creator?: number
+    addDictList?:string[]
+    deleteDictList?:number[]
+    updateDictList?:{id:number,attrValue:string}[]
+}
+export const attrUpdate = (params:AttrUpdateParams)=> request.post(url.attrUpdate, params)
+
+export type AttrDeleteParams = {
+    form?: 1|2
+    tenantId:number
+    attrId:string
+    attrField: string
+}
+export const attrDelete = (params:AttrDeleteParams)=> request.post(url.attrDelete, params)

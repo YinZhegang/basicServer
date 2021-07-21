@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-20 13:26:39
+ * @LastEditTime: 2021-07-21 11:46:25
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dict\index.vue
@@ -26,20 +26,32 @@
                   <el-option :key="'userData.detail.form.attrType'+ i" v-for="(i,index) in AttrTypeArr" :label="i" :value="index"></el-option>
               </el-select>
           </el-form-item>
-          <el-form-item  v-if="userData.detail.form.attrType==9||userData.detail.form.attrType==10" prop="expandValueList" label="选项">
+          <el-form-item  v-if="userData.detail.form.attrType==9||userData.detail.form.attrType==10" prop="tagList" label="选项">
               <el-tag
                 :key="tag + index"
-                v-for="(tag,index) in userData.detail.form.expandValueList"
+                v-for="(tag,index) in userData.detail.form.tagList"
                 closable
                 style="margin:1px"
                 :disable-transitions="false"
-                @close="handleClose(tag)">
-                {{tag}}
+                @close="(tag)=>{
+
+                  userData.detail.form.tagList.splice(userData.detail.form.tagList.indexOf(tag), 1);
+                  if(userData.detail.isEdit){
+                      if(tag.id) {
+                        if(userData.detail.form.deleteDictList){
+                          userData.detail.form.deleteDictList.push(tag.id)
+                        }else{
+                            userData.detail.form.deleteDictList =[tag.id]
+                        } 
+                      } 
+                  }
+                  }">
+                {{tag.attrValue}}
               </el-tag>
               <el-input
                   class="input-new-tag"
-                  v-if="expandValueList.inputVisible"
-                  v-model="expandValueList.inputValue"
+                  v-if="tagList.inputVisible"
+                  v-model="tagList.inputValue"
                   ref="saveTagInput"
                   size="small"
                   @keyup.enter.native="handleInputConfirm"
@@ -62,7 +74,7 @@
     <el-tabs v-model="activeName">
        
       <el-tab-pane label="用户字段" name="user">
-        <el-button-func @click="()=>{userData.detail.isEdit = false;userData.detail.form.form = 1;userData.detail.visible = true}" size="small" style="float: right" icon="el-icon-plus"
+        <el-button-func @click="()=>{userData.detail.isEdit = false;userData.detail.form = userData.detail.form = {tenantId:1,form:1,tagList:[]};userData.detail.visible = true}" size="small" style="float: right" icon="el-icon-plus"
         >新增用户字段</el-button-func>
         <br/>
         <br/>
@@ -108,13 +120,13 @@
             <template slot-scope="scope">
               <i @click="editDetail(1, scope.row)"  class="el-icon-edit func-opr"></i>
               <el-divider direction="vertical"></el-divider>
-              <i class="el-icon-delete func-opr"></i>
+              <i @click="deleteData({...scope.row,form:2})" class="el-icon-delete func-opr"></i>
             </template>
           </el-table-column>
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="部门字段" name="dept">
-         <el-button-func @click="()=>{userData.detail.isEdit = false;userData.detail.form.form = 2;userData.detail.visible = true}" size="small" style="float: right" icon="el-icon-plus"
+         <el-button-func @click="()=>{userData.detail.isEdit = false;userData.detail.form = {tenantId:1,form:2,tagList:[]};userData.detail.visible = true}" size="small" style="float: right" icon="el-icon-plus"
         >新增部门字段</el-button-func>
         <br/>
         <br/>
@@ -160,7 +172,7 @@
             <template slot-scope="scope">
               <i @click="editDetail(2, scope.row)" class="el-icon-edit func-opr"></i>
               <el-divider direction="vertical"></el-divider>
-              <i class="el-icon-delete func-opr"></i>
+              <i @click="deleteData({...scope.row,form:2})" class="el-icon-delete func-opr"></i>
             </template>
           </el-table-column>
         </el-table>
@@ -171,7 +183,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import { attrList, AttrListParams, attrAdd, AttrAddParams,attrVerify } from '@/api/dict'
+import { attrList, AttrListParams, attrAdd, AttrAddParams,attrVerify,attrUpdate,AttrUpdateParams,attrDelete } from '@/api/dict'
 import { ListData } from '../../../types/page'
 
 @Component({
@@ -190,7 +202,7 @@ export default class extends Vue {
       tenantId: 1
     },
     detail:{
-      form:{tenantId:1,form:1,creator:973,expandValueList:[]},
+      form:{tenantId:1,form:1,creator:973,tagList:[]},
       isEdit:false,
       rules:{
         attrName:[
@@ -198,7 +210,7 @@ export default class extends Vue {
           { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
         ],
         attrType:  { required: true, message: '请输入字段名称', trigger: 'blur' },
-        expandValueList: { required: true, message: '请填写选项', trigger: 'blur' }
+        tagList: { required: true, message: '请填写选项', trigger: 'blur' }
       },
       visible:false
     },
@@ -218,7 +230,7 @@ export default class extends Vue {
       tenantId: 1
     },
     detail:{
-      form:{tenantId:1,form:1,expandValueList:[]},
+      form:{tenantId:1,form:1,tagList:[]},
       isEdit:false,
       rules:{
         
@@ -232,7 +244,7 @@ export default class extends Vue {
   AttrTypeArr:Array<string> = [
     '默认属性','单行文本', '多行文本','手机号','邮箱','超链接','数字','日期','时间','下拉选择','多项选择','开关'
   ]
-  expandValueList = {
+  tagList = {
     inputVisible: false,
     inputValue:'',
    
@@ -241,7 +253,7 @@ export default class extends Vue {
     const data = JSON.parse(JSON.stringify(row))
      this.userData.detail.form = data
      this.userData.detail.form.form = form
-     this.userData.detail.form.expandValueList = data.attrDictListVOList.map(i=>i.attrValue)
+     this.userData.detail.form.tagList = data.attrDictListVOList
      this.userData.detail.visible = true
   }
   async attrAddMethod(form:1|2,ref:string){
@@ -249,7 +261,20 @@ export default class extends Vue {
        if(!valid) return
        attrVerify({form,tenantId:1}).then(res=>{
          this[form==1?'userData':'deptData'].detail.form.attrField = res.attrField
-          this.userData.addData((<any>this.userData.detail).form)
+         this.userData.detail.form.creator =524
+         if(this.userData.detail.isEdit){
+              
+              attrUpdate(this.userData.form).then(()=>{
+                this.refreshData(form)
+              })    
+         }else{
+            this.userData.detail.form.expandValueList = this.userData.detail.form.tagList.map((i:any)=>i.attrValue)
+            this.userData.addData((<any>this.userData.detail).form).then(()=>{
+               this.refreshData(form)
+            })
+
+         }
+          
        })
       
        console.log((<any>this.userData.detail).form)
@@ -257,29 +282,44 @@ export default class extends Vue {
     })
   }
   showInput(){
-    this.expandValueList.inputVisible = true;
+    this.tagList.inputVisible = true;
         this.$nextTick(() => {
           this.$refs.saveTagInput.$refs.input.focus();
         });
   }
+  deleteData(row:any){
+    attrDelete({...row,tenantId:1}).then(()=>{
+      this.refreshData(row.form)
+    })
+   
+  }
    handleInputConfirm(){
-        let inputValue = this.expandValueList.inputValue;
-        if (inputValue) {
-          this.userData.detail.form.expandValueList.push(inputValue);
+        let inputValue = this.tagList.inputValue;
+        if((this.userData.detail as any).form.tagList.find((i:any)=>i.attrValue == inputValue)) {
+            this.tagList.inputVisible = false;
+            this.tagList.inputValue = '';
+            return
         }
-        this.expandValueList.inputVisible = false;
-        this.expandValueList.inputValue = '';
+        if (inputValue) {
+         (this.userData.detail as any).form.tagList.push({attrValue:inputValue});
+         if(this.userData.detail.form.addDictList){
+            this.userData.detail.form.addDictList.push(inputValue)
+         }
+         else{
+           this.userData.detail.form.addDictList=[inputValue]
+         }
+         
+        }
+        this.tagList.inputVisible = false;
+        this.tagList.inputValue = '';
     }
   created() {
-    attrList(<AttrListParams>this.userData.params).then((res:any)=>{
-      this.userData.list = res.records
-    })
-     attrList(<AttrListParams>this.deptData.params).then((res:any)=>{
-      this.deptData.list = res.records
-    })
+    this.refreshData(1);this.refreshData(2)
   }
-  addData(params: AttrAddParams){
-    
+  refreshData(form:number):void{
+     attrList(<AttrListParams>this[form==1?'userData':'deptData'].params).then((res:any)=>{
+      this[form==1?'userData':'deptData'].list = res.records
+    })
   }
 }
 </script>
