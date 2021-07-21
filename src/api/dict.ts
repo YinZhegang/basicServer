@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-19 10:46:33
- * @LastEditTime: 2021-07-21 11:39:07
+ * @LastEditTime: 2021-07-21 11:53:10
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\api\dict.ts
@@ -59,3 +59,14 @@ export type AttrDeleteParams = {
     attrField: string
 }
 export const attrDelete = (params:AttrDeleteParams)=> request.post(url.attrDelete, params)
+
+export type AttrSortParams = {
+    form?: 1|2
+    tenantId:number
+    currentAttrId:string
+    currentAttrOrder: number
+    laterAttrId: string
+    laterAttrOrder:number
+}
+export const attrSort = (params:AttrSortParams)=> request.post(url.attrSort, params)
+

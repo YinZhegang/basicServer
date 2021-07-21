@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-12 17:41:35
- * @LastEditTime: 2021-07-20 13:15:49
+ * @LastEditTime: 2021-07-21 14:16:29
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\types\page.d.ts

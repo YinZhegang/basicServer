@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-21 11:46:25
+ * @LastEditTime: 2021-07-21 14:18:26
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dict\index.vue
@@ -263,7 +263,6 @@ export default class extends Vue {
          this[form==1?'userData':'deptData'].detail.form.attrField = res.attrField
          this.userData.detail.form.creator =524
          if(this.userData.detail.isEdit){
-              
               attrUpdate(this.userData.form).then(()=>{
                 this.refreshData(form)
               })    
@@ -272,7 +271,6 @@ export default class extends Vue {
             this.userData.addData((<any>this.userData.detail).form).then(()=>{
                this.refreshData(form)
             })
-
          }
           
        })
@@ -280,6 +278,9 @@ export default class extends Vue {
        console.log((<any>this.userData.detail).form)
       
     })
+  }
+  sort(){
+    
   }
   showInput(){
     this.tagList.inputVisible = true;

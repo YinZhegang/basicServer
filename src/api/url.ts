@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-19 13:21:32
- * @LastEditTime: 2021-07-21 11:37:28
+ * @LastEditTime: 2021-07-21 11:52:06
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\api\url.ts
@@ -13,5 +13,6 @@ export default {
   attrAdd: `${baseUrl}/attr/add`,
   attrUpdate: `${baseUrl}/attr/update`,
   attrVerify: `${baseUrl}/attr/verify`,
-  attrDelete:  `${baseUrl}/attr/delete`
+  attrDelete:  `${baseUrl}/attr/delete`,
+  attrSort: `${baseUrl}/attr/sort`
 }
