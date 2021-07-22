@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-22 09:56:35
+ * @LastEditTime: 2021-07-22 15:26:40
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dict\index.vue
@@ -22,7 +22,7 @@
                 />
           </el-form-item>
            <el-form-item prop="attrType" label="字段类型">
-              <el-select :disabled="userData.detail.isEdit" v-model="userData.detail.form.attrType" placeholder="请选择活动区域">
+              <el-select :disabled="userData.detail.isEdit" v-model="userData.detail.form.attrType" placeholder="请选择字段类型">
                   <el-option :key="'userData.detail.form.attrType'+ i" v-for="(i,index) in AttrTypeArr" :label="i" :value="index"></el-option>
               </el-select>
           </el-form-item>
@@ -80,7 +80,9 @@
         <br/>
         <el-table
           v-loading="userData.loading"
-          border=""
+          border
+           stripe
+           size="small"
           :header-cell-style="{
             background: '#f7f8f9',
             color: '#333',
@@ -100,15 +102,20 @@
                 {{scope.row.isNull?'必填':'非必填'}}
             </template>
           </el-table-column>
+          <el-table-column prop="attrField" label="属性类型" >
+            <template slot-scope="scope">
+                {{scope.row.isDefault?'自定义属性':'默认属性'}}
+            </template>
+          </el-table-column>
           <el-table-column
             width="150"
             align="center"
             label="排序"
           >
-            <template>
-              <el-button-group>
-                <el-button size="mini" icon="el-icon-arrow-up"></el-button>
-                <el-button size="mini" icon="el-icon-arrow-down"></el-button>
+            <template slot-scope="scope">
+              <el-button-group size="mini">
+                <el-button  @click="sort(1,scope,1)" size="mini" icon="el-icon-arrow-up"></el-button>
+                <el-button @click="sort(1,scope,0)" size="mini" icon="el-icon-arrow-down"></el-button>
               </el-button-group>
             </template>
           </el-table-column>
@@ -120,7 +127,7 @@
             <template slot-scope="scope">
               <i @click="editDetail(1, scope.row)"  class="el-icon-edit func-opr"></i>
               <el-divider direction="vertical"></el-divider>
-              <el-button :disabled="!scope.row.isDefault" type="text" style="color:#000" @click="deleteData({...scope.row,form:1})"><i class="el-icon-delete" ></i></el-button>
+              <el-button size="mini" :disabled="!scope.row.isDefault" type="text" style="color:#000;font-size:16px" @click="deleteData({...scope.row,form:1})"><i class="el-icon-delete" ></i></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -133,6 +140,8 @@
           <el-table
           v-loading="deptData.loading"
           border
+            stripe
+           size="small"
           :header-cell-style="{
             background: '#f7f8f9',
             color: '#333',
@@ -148,8 +157,13 @@
             </template>
           </el-table-column>
           <el-table-column prop="isNull" label="必填" >
-          <template slot-scope="scope">
+            <template slot-scope="scope">
                 {{scope.row.isNull?'必填':'非必填'}}
+            </template>
+          </el-table-column>
+          <el-table-column prop="attrField" label="属性类型" >
+            <template slot-scope="scope">
+                {{scope.row.isDefault?'自定义属性':'默认属性'}}
             </template>
           </el-table-column>
           <el-table-column
@@ -159,8 +173,8 @@
           >
             <template slot-scope="scope">
               <el-button-group>
-                <el-button size="mini" @click="sort(2,scope)" icon="el-icon-arrow-up"></el-button>
-                <el-button size="mini" icon="el-icon-arrow-down"></el-button>
+                <el-button size="mini" @click="sort(2,scope,1)" icon="el-icon-arrow-up"></el-button>
+                <el-button size="mini"  @click="sort(2,scope,0)" icon="el-icon-arrow-down"></el-button>
               </el-button-group>
             </template>
           </el-table-column>
@@ -172,7 +186,7 @@
             <template slot-scope="scope">
               <i @click="editDetail(2, scope.row)" class="el-icon-edit func-opr"></i>
               <el-divider direction="vertical"></el-divider>
-              <el-button :disabled="!scope.row.isDefault" type="text" style="color:#000" @click="deleteData({...scope.row,form:2})"><i class="el-icon-delete" ></i></el-button>
+              <el-button size="mini" :disabled="!scope.row.isDefault" type="text" style="color:#000;font-size:16px" @click="deleteData({...scope.row,form:2})"><i class="el-icon-delete" ></i></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -248,7 +262,7 @@ export default class extends Vue {
     loading: false
   };
   AttrTypeArr:Array<string> = [
-    '默认属性','单行文本', '多行文本','手机号','邮箱','超链接','数字','日期','时间','下拉选择','多项选择','开关'
+    ' ','单行文本', '多行文本','手机号','邮箱','超链接','数字','日期','时间','下拉选择','多项选择','开关'
   ]
   tagList = {
     inputVisible: false,
@@ -298,12 +312,22 @@ export default class extends Vue {
       
     })
   }
-  sort(form:number,scope:any){
+  // type: 1为向上调   0为向下
+  sort(form:number,scope:any,type:number =0){
+    const dA = form==1?'userData':'deptData'
+    var idx = scope.$index
+    if(type&&idx==0) return
+    if(type==0&&idx==this[dA].list.length) return
     attrSort({
        form,
-       tenantId:1
+       tenantId:183,
+       currentAttrId: this[dA].list[idx].attrId,
+       currentAttrOrder:this[dA].list[idx].attrOrder,
+       laterAttrId:this[dA].list[type?idx-1:idx+1].attrId,
+       laterAttrOrder:this[dA].list[type?idx-1:idx+1].attrOrder
+    }).then(()=>{
+      this.refreshData(form)
     })
-    console.log(scope)
   }
   showInput(){
     this.tagList.inputVisible = true;

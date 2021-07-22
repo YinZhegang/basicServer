@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-06-03 09:57:20
- * @LastEditTime: 2021-07-20 12:59:56
+ * @LastEditTime: 2021-07-22 15:20:10
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\App.vue
@@ -31,5 +31,7 @@ export default class extends Vue {}
   border-bottom: 1px solid #EBEEF5;
   padding: 15px;
 }
-
+.el-dialog{
+  border-radius:10px
+}
 </style>
