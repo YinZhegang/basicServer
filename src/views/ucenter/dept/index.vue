@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-14 14:24:44
+ * @LastEditTime: 2021-07-22 10:54:45
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -141,12 +141,10 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import DeptBlock from '@/components/DeptBlock/index.vue'
-
+import { deptTop } from '@/api/dept'
 @Component({
   name: 'dept',
   components: {
-    DeptBlock,
     ChooseMember: () => import('@/components/ChooseItems/index.vue')
   }
 })

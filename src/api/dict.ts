@@ -1,13 +1,12 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-19 10:46:33
- * @LastEditTime: 2021-07-21 11:53:10
+ * @LastEditTime: 2021-07-21 17:24:33
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\api\dict.ts
  * 可以输入预定的版权声明、个性签名、空行等
  */
-import { type } from 'node:os'
 import { Params, ListResponse } from '../types/page'
 import request from './request'
 import url from './url'

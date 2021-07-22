@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-21 14:18:26
+ * @LastEditTime: 2021-07-22 09:56:35
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dict\index.vue
@@ -9,7 +9,7 @@
 -->
 <template>
   <div>
-    <el-dialog :visible.sync="userData.detail.visible" :title="(userData.detail.isEdit?'编辑':'添加')+(userData.detail.form.form==1?'用户字段':'部门字段')">
+    <el-dialog :before-close="(d)=>{$refs.userAddForm.resetFields();d()}" :visible.sync="userData.detail.visible" :title="(userData.detail.isEdit?'编辑':'添加')+(userData.detail.form.form==1?'用户字段':'部门字段')">
       <el-form ref="userAddForm" size="small" :rules="userData.detail.rules" :model="userData.detail.form" label-width="100px">
           <el-form-item prop="attrName" label="字段名称">
               <el-input
@@ -120,7 +120,7 @@
             <template slot-scope="scope">
               <i @click="editDetail(1, scope.row)"  class="el-icon-edit func-opr"></i>
               <el-divider direction="vertical"></el-divider>
-              <i @click="deleteData({...scope.row,form:2})" class="el-icon-delete func-opr"></i>
+              <el-button :disabled="!scope.row.isDefault" type="text" style="color:#000" @click="deleteData({...scope.row,form:1})"><i class="el-icon-delete" ></i></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -157,9 +157,9 @@
             align="center"
             label="排序"
           >
-            <template>
+            <template slot-scope="scope">
               <el-button-group>
-                <el-button size="mini" icon="el-icon-arrow-up"></el-button>
+                <el-button size="mini" @click="sort(2,scope)" icon="el-icon-arrow-up"></el-button>
                 <el-button size="mini" icon="el-icon-arrow-down"></el-button>
               </el-button-group>
             </template>
@@ -172,7 +172,7 @@
             <template slot-scope="scope">
               <i @click="editDetail(2, scope.row)" class="el-icon-edit func-opr"></i>
               <el-divider direction="vertical"></el-divider>
-              <i @click="deleteData({...scope.row,form:2})" class="el-icon-delete func-opr"></i>
+              <el-button :disabled="!scope.row.isDefault" type="text" style="color:#000" @click="deleteData({...scope.row,form:2})"><i class="el-icon-delete" ></i></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -183,7 +183,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import { attrList, AttrListParams, attrAdd, AttrAddParams,attrVerify,attrUpdate,AttrUpdateParams,attrDelete } from '@/api/dict'
+import { attrList, AttrListParams, attrAdd, AttrAddParams,attrVerify,attrUpdate,AttrUpdateParams,attrDelete,attrSort } from '@/api/dict'
 import { ListData } from '../../../types/page'
 
 @Component({
@@ -191,10 +191,14 @@ import { ListData } from '../../../types/page'
 })
 export default class extends Vue {
   activeName: 'user' | 'dept' = 'user';
+  disabledIcon={
+     color:'#f4f4f5'
+  }
   userData: ListData<AttrListParams, any> = {
     type:'user',
     getList: attrList,
     addData:attrAdd,
+    deleteData:attrDelete,
     params: {
       current: 1,
       size: 100,
@@ -210,7 +214,9 @@ export default class extends Vue {
           { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
         ],
         attrType:  { required: true, message: '请输入字段名称', trigger: 'blur' },
-        tagList: { required: true, message: '请填写选项', trigger: 'blur' }
+        tagList: { required: true, message: '请填写选项', trigger: 'blur' },
+        isNull: { required: true, message: '请填写是否必填', trigger: 'blur' },
+        isListShow: { required: true, message: '请填写是否展示在列表', trigger: 'blur' },
       },
       visible:false
     },
@@ -251,36 +257,53 @@ export default class extends Vue {
   }
   editDetail(form:number,row:any){
     const data = JSON.parse(JSON.stringify(row))
+     this.userData.detail.isEdit = true
      this.userData.detail.form = data
      this.userData.detail.form.form = form
      this.userData.detail.form.tagList = data.attrDictListVOList
      this.userData.detail.visible = true
   }
   async attrAddMethod(form:1|2,ref:string){
+     var tip=()=>{
+          this.$message({
+            message: `${this.userData.detail.isEdit?'修改':'添加'}成功`,
+            type: 'success'
+          });
+         }
     (<any>this.$refs[ref]).validate((valid:boolean) =>{
        if(!valid) return
        attrVerify({form,tenantId:1}).then(res=>{
          this[form==1?'userData':'deptData'].detail.form.attrField = res.attrField
          this.userData.detail.form.creator =524
+         
          if(this.userData.detail.isEdit){
-              attrUpdate(this.userData.form).then(()=>{
+           this.userData.detail.form.tenantId =1
+              attrUpdate(this.userData.detail.form).then(()=>{
                 this.refreshData(form)
-              })    
+                 tip()
+              })
          }else{
             this.userData.detail.form.expandValueList = this.userData.detail.form.tagList.map((i:any)=>i.attrValue)
             this.userData.addData((<any>this.userData.detail).form).then(()=>{
                this.refreshData(form)
+               tip()
             })
          }
-          
+        
+         
+         this.userData.detail.visible = false
        })
       
        console.log((<any>this.userData.detail).form)
       
     })
   }
-  sort(){
-    
+  sort(form:number,scope:any){
+    attrSort({
+       form,
+       tenantId:1
+    })
+    console.log(scope)
   }
   showInput(){
     this.tagList.inputVisible = true;
@@ -290,6 +313,10 @@ export default class extends Vue {
   }
   deleteData(row:any){
     attrDelete({...row,tenantId:1}).then(()=>{
+      this.$message({
+        type:'success',
+        message:'删除成功'
+      })
       this.refreshData(row.form)
     })
    

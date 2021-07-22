@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-12 17:41:35
- * @LastEditTime: 2021-07-21 14:16:29
+ * @LastEditTime: 2021-07-21 18:07:50
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\types\page.d.ts
@@ -40,14 +40,14 @@ export interface ListResponse <ListItem> {
 export interface ListData <P, LI> {
     getList:(params: P) => Promise<AxiosResponse<any>>
     updateData?:(params: LI|any) => Promise<AxiosResponse<any>>
-    deleteData?:(params: Array<number>) => Promise<AxiosResponse<any>>
+    deleteData?:(params: Array<number>|any) => Promise<AxiosResponse<any>>
     addData?:(params: LI|any) => Promise<AxiosResponse<any>>
     params?:P
     list:Array<LI>
     total?: number
     loading: boolean
     selections?:Array<LI>
-    detail?:{
+    detail:{
       form:LI|{[pName: string]: any}
       rules?:{[pname: string]: object|Array<object>}
       visible:boolean
