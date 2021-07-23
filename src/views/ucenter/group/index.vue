@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-12 17:16:48
+ * @LastEditTime: 2021-07-23 15:47:04
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\group\index.vue
@@ -9,62 +9,91 @@
 -->
 <template>
    <div class="cont-right">
+     <el-dialog :title="groupData.detail.isEdit?'编辑用户组':'新增用户组'" :visible.sync="groupData.detail.visible">
+        <el-form style="width:50%;margin: 0 auto" size="small" label-width="100px" :rules="groupData.detail.rules" :model="groupData.detail.form">
+          <el-form-item prop="groupName" label="用户组名称">
+              <el-input
+                type="text"
+                placeholder="请输入组名"
+                v-model="groupData.detail.form.groupName"
+                maxlength="10"
+                style="width:200px"
+                show-word-limit
+                />
+          </el-form-item>
+          <el-form-item prop="type" label="用户组类型">
+              <el-select v-model="groupData.detail.form.type">
+                 <el-option label="固定用户组" :value="1"></el-option>
+                 <el-option label="动态用户组" :value="2"></el-option>
+              </el-select>
+          </el-form-item>
+          <el-form-item prop="type">
+              <el-button type="primary">提 交</el-button>
+               <el-button>取消 </el-button>
+          </el-form-item>
+        </el-form>
+
+     </el-dialog>
+
       <el-form
         style="float: left; overflow: hidden"
         size="small"
         :inline="true"
-        :model="params"
+        :model="groupData.params"
         ref="pub"
       >
         <el-form-item>
-          <el-input v-model="params.name" placeholder="输入关键词">
-            <el-select
-              style="width: 100px"
-              v-model="params.name1"
-              slot="prepend"
-              placeholder="请选择"
-            >
-              <el-option label="用户名" value="1"></el-option>
-              <el-option label="姓名" value="2"></el-option>
-              <el-option label="手机号" value="3"></el-option>
-              <el-option label="创建者" value="4"></el-option>
-            </el-select>
-          </el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-select style="width:100px" v-model="params.select" placeholder="请选择">
-            <el-option label="全部类型" value="1"></el-option>
-            <el-option label="辅警" value="2"></el-option>
-            <el-option label="东城" value="3"></el-option>
-            <el-option label="西城" value="4"></el-option>
+          <el-select style="width:120px" v-model="groupData.params.type" placeholder="请选择">
+            <el-option label="固定用户组" :value="1"></el-option>
+            <el-option label="动态用户组" :value="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
            <el-date-picker
-                v-model="params.value1"
+                v-model="groupData.params.time"
                 type="datetimerange"
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期">
             </el-date-picker>
         </el-form-item>
+        <el-form-item>
+          <el-input v-model="groupData.params[groupData.params.ctype]" placeholder="输入关键词">
+            <el-select
+              style="width: 100px"
+              v-model="groupData.params.ctype"
+              slot="prepend"
+              placeholder="请选择"
+              @change="(val) => {
+                groupData.params.groupName = ''
+                groupData.params.creatorName = ''
+              }"
+            >
+              <el-option label="用户组" value="groupName"></el-option>
+              <el-option label="创建者" value="creatorName"></el-option>
+            </el-select>
+            <el-button @click="getList" slot="append" icon="el-icon-search"></el-button>
+          </el-input>
+        </el-form-item>
       </el-form>
 
       <el-button-group style="float: right; overflow: hidden">
         <el-button-func size="small" icon="el-icon-plus"
+        @click="() => {
+          groupData.detail.visible = true
+          groupData.detail.isEdit = false
+          groupData.detail.form = {}
+        }"
           >新增用户组</el-button-func
         >
-        <el-button-func size="small" icon="el-icon-edit"
-          >编辑</el-button-func
-        >
-        <el-button-func size="small" icon="el-icon-delete"
+        <!-- <el-button-func size="small" icon="el-icon-delete"
           >删除</el-button-func
-        >
+        > -->
       </el-button-group>
 
       <!-- 数据列表 -->
       <el-table
-        v-loading="loading"
+        v-loading="groupData.loading"
         border
          stripe
         size="small"
@@ -73,20 +102,35 @@
           color: '#333',
           borderBottom: '1px solid #d7dbe6'
         }"
-        :data="list"
+        :data="groupData.list"
       >
-        <el-table-column prop="activName" label="用户组名称" />
-        <el-table-column prop="orgaName" label="类型" />
-        <el-table-column prop="startTime" label="用户/部门数" />
-        <el-table-column prop="activStatus" label="创建时间"> </el-table-column>
+        <el-table-column prop="groupName" label="用户组名称" />
+        <el-table-column prop="type" label="类型" >
+          <template slot-scope="scope">
+              {{scope.row.type===1?'固定用户组':'动态用户'}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="count" label="用户/部门数" />
+        <el-table-column prop="createTime" label="创建时间">
+          <template slot-scope="scope">
+              {{scope.row.createTime}}
+          </template>
+        </el-table-column>
+        <el-table-column width="100" align="center" label="操作">
+        <template slot-scope="scope">
+          <i @click="editDetail(scope.row)" class="el-icon-edit func-opr" style="cursor: pointer"></i>
+          <el-divider direction="vertical"></el-divider>
+          <i @click="deptDelete(scope.row)"  class="el-icon-delete func-opr" style="cursor: pointer"></i>
+        </template>
+      </el-table-column>
       </el-table>
       <el-pagination
         style="float: right; overflow: hidden"
-        :current-page="params.current"
+        :current-page="groupData.params.current"
         :page-sizes="[5, 10, 20, 50]"
-        :page-size="params.size"
+        :page-size="groupData.params.size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
+        :total="groupData.total"
         @size-change="sizeChange"
         @current-change="currentChange"
       />
@@ -95,85 +139,66 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
+import { ListData } from '../../../types/page'
+import { GroupListParams, groupList } from '@/api/group'
 
 @Component({
   name: 'group'
 })
 export default class extends Vue {
-     activeName = 'first'
-  input = '';
-  list = [];
-  loading = false;
-  params = {
-    current: 0,
-    size: 10,
-    type: []
-  };
+  groupData:ListData<GroupListParams, any> = {
+    getList: groupList,
+    list: [],
+    params: {
+      current: 1,
+      size: 10,
+      time: [],
+      groupName: '',
+      creatorName: '',
+      ctype: 'groupName'
 
-  total = 10;
-
-  data: any = [
-    {
-      label: '部门1',
-      children: [
-        {
-          label: '二级 1-1',
-          children: [
-            {
-              label: '三级 1-1-1'
-            }
-          ]
-        }
-      ]
     },
-    {
-      label: '部门2',
-      children: [
-        {
-          label: '二级 2-1',
-          children: [
-            {
-              label: '三级 2-1-1'
-            }
-          ]
-        },
-        {
-          label: '二级 2-2',
-          children: [
-            {
-              label: '三级 2-2-1'
-            }
-          ]
-        }
-      ]
+    detail: {
+      form: {},
+      isEdit: false,
+      visible: false,
+      rules: {}
     },
-    {
-      label: '一级 3',
-      children: [
-        {
-          label: '二级 3-1',
-          children: [
-            {
-              label: '三级 3-1-1'
-            }
-          ]
-        },
-        {
-          label: '二级 3-2',
-          children: [
-            {
-              label: '三级 3-2-1'
-            }
-          ]
-        }
-      ]
-    }
-  ];
+    total: 0,
+    loading: false
+  }
 
-  defaultProps: any = {
-    children: 'children',
-    label: 'label'
-  };
+  created() {
+    this.getList()
+  }
+
+  currentChange(val:number) {
+    this.groupData.params.current = val
+    this.getList()
+  }
+
+  sizeChange(val:number) {
+    this.groupData.params.size = val
+    this.groupData.params.current = 1
+    this.getList()
+  }
+
+  getList() {
+    console.log(this.groupData.params)
+    this.groupData.loading = true
+    this.groupData.getList({ ...this.groupData.params, startTime: this.groupData.params.time[0], endTime: this.groupData.params.time[1] }).then((res:any) => {
+      this.groupData.list = res.records
+      this.groupData.total = res.total
+      this.groupData.loading = false
+    })
+  }
+
+  editDetail(row:any) {
+    const data = JSON.parse(JSON.stringify(row))
+    this.groupData.detail.form = data
+    this.groupData.detail.isEdit = true
+    this.groupData.detail.visible = true
+  }
 }
 </script>
 

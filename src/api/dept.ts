@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-21 17:24:23
- * @LastEditTime: 2021-07-22 14:09:05
+ * @LastEditTime: 2021-07-23 13:56:06
  * @LastEditors: yinzhegang
  * @Description: 
  * @FilePath: \basicServes\src\api\dept.ts
@@ -56,7 +56,7 @@ export interface DeptUpdateParams extends Params {
 }
 export const deptUpdate = (params: DeptUpdateParams) =>request.post(url.deptUpdate, params)
 
-export interface DeptDeleteParams extends Params {
+export interface DeptDeleteParams {
     deptId:number
 }
 export const deptDelete = (params: DeptDeleteParams) =>request.post(url.deptDelete, params)

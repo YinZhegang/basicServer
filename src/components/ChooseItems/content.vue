@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-12 11:41:59
- * @LastEditTime: 2021-07-22 18:27:01
+ * @LastEditTime: 2021-07-23 13:22:26
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\components\ChooseItems\content.vue
@@ -23,9 +23,9 @@
                     }">{{item.deptName}}</span>
                 </el-breadcrumb-item>
             </el-breadcrumb>
-            <div class="main-dept-list">
-              <el-checkbox-group @change="selected('dept',deptSelection)" v-model="deptSelection">
-                <el-checkbox :key="'deptList' +idx" v-for="(dept,idx) in deptList" :label="dept">
+            <div v-loading="loading" class="main-dept-list">
+              <el-checkbox-group v-model="deptSelection">
+                <el-checkbox  :key="'deptList' +idx" v-for="(dept,idx) in deptList" :label="dept">
                   <div  class="main-dept-list-item">
                     <div><svg-icon :style="{color: theme}" name="tree" /><p>{{dept.deptName}}</p></div>
                     <p @click.stop.prevent="loadMoreList(dept)" :style="{color: theme}"><svg-icon name="tree-table" />&nbsp;下级</p>
@@ -52,9 +52,8 @@
              </div>
              <div style="text-align:center;margin-top:10px">
                     <el-button size="mini">取消</el-button>
-                    <el-button size="mini" type="primary">确定</el-button>
+                    <el-button @click="sure" size="mini" type="primary">确定</el-button>
              </div>
-
           </div>
       </div>
 </template>
@@ -67,17 +66,21 @@ import { deptTop, deptList } from '@/api/dept'
   name: 'ChooseContent'
 })
 export default class extends Vue {
+  @Prop({ default: () => ['dept'] }) type: string[] // dept depts user users group groups
    serachKey = ''
    get theme() {
      console.log(SettingsModule)
      return SettingsModule.theme
    }
 
+   sureData = {}
+   loading = false
    deptBread:any[] = []
    deptList = []
    deptSelection=[]
    deptSelectionSelected = []
    loadMoreList(dept:any) {
+     this.loading = true
      deptList({
        deptId: dept.deptId,
        detail: true
@@ -85,12 +88,36 @@ export default class extends Vue {
        this.deptList = res
        this.deptBread.push(dept)
        this.fillBox('dept', this.deptList)
+       this.$nextTick(() => {
+         this.loading = false
+       })
      })
    }
 
    canceled(type = 'dept', item:any) {
      this[type + 'SelectionSelected'].splice(item, 1)
      this[type + 'Selection'].splice(item, 1)
+   }
+
+   @Watch('deptSelection')
+   deptSelectionChange(n:any, o:any) {
+     if (n.length > o.length) {
+       this.selected('dept', n)
+     } else {
+       this.unSelected('dept', n, o)
+     }
+   }
+
+   unSelected(type = 'dept', n:any, o:any) {
+     console.log(n, o)
+     const spliceItems = o.filter(i => n.findIndex(f => f[type + 'Id'] == i[type + 'Id']) < 0)
+     //  this.canceled('dept', spliceItems)
+     console.log(99, this.loading)
+     if (this.loading) return
+     spliceItems.forEach(i => {
+       this[type + 'SelectionSelected'].splice(this[type + 'SelectionSelected'].findIndex(f => f[type + 'Id'] == i[type + 'Id']), 1)
+     })
+     //  this[type+'SelectionSelected'].splice(,)
    }
 
    selected(type = 'dept', arr:any) {
@@ -115,16 +142,24 @@ export default class extends Vue {
    }
 
    loadTopDept() {
+     this.loading = true
      deptTop({ tenantId: 183, detail: true }).then((res:any) => {
        this.deptBread = []
        this.deptList = [res]
        // console.log(res)
        this.fillBox('dept', this.deptList)
+       this.$nextTick(() => {
+         this.loading = false
+       })
      })
    }
 
    fillBox(type:string, list:any) {
      this[type + 'Selection'] = list.filter((it:any) => this[type + 'SelectionSelected'].find((f:any) => f[type + 'Id'] === it[type + 'Id']))
+   }
+
+   sure() {
+
    }
 }
 </script>

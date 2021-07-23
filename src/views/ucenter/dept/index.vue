@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-22 14:43:35
+ * @LastEditTime: 2021-07-23 14:13:10
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -14,7 +14,10 @@
       size="small"
       style="float: right; cursor: pointer"
       icon="el-icon-plus"
-      @click="showDialog('新增部门', '', '')"
+      @click="() => {
+        detail.isEdit = false;
+ detail.visible = true;detail.form={}
+}"
       >新增部门</el-button-func
     >
     <el-dialog :title="detail.isEdit?'编辑部门':'新增部门'" :visible.sync="detail.visible" width="50%">
@@ -80,9 +83,9 @@
       </el-table-column> -->
       <el-table-column width="100" align="center" label="操作">
         <template slot-scope="scope">
-          <i @click="editDetail(scope.row)" class="el-icon-edit" style="cursor: pointer"></i>
+          <i @click="editDetail(scope.row)" class="el-icon-edit func-opr" style="cursor: pointer"></i>
           <el-divider direction="vertical"></el-divider>
-          <i class="el-icon-delete" style="cursor: pointer"></i>
+          <i @click="deptDelete(scope.row.deptId)"  class="el-icon-delete func-opr" style="cursor: pointer"></i>
         </template>
       </el-table-column>
     </el-table>
@@ -91,7 +94,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import { deptTop, deptList, deptOrder } from '@/api/dept'
+import { deptTop, deptList, deptOrder, deptDelete } from '@/api/dept'
 import { attrList } from '@/api/dict'
 @Component({
   name: 'dept',
@@ -147,7 +150,18 @@ export default class extends Vue {
     })
   }
 
-  editDetail(row) {
+  deptDelete(deptId:number) {
+    deptDelete({ deptId }).then(() => {
+      this.$message({
+        type: 'success',
+        message: '删除成功'
+      })
+      this.tableData = []
+      this.getDeptTop()
+    })
+  }
+
+  editDetail(row:any) {
     const data = JSON.parse(JSON.stringify(row))
     this.detail.visible = true
     this.detail.form = data

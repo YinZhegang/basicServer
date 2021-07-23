@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-12 17:41:35
- * @LastEditTime: 2021-07-21 18:07:50
+ * @LastEditTime: 2021-07-23 15:04:41
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\types\page.d.ts
@@ -42,7 +42,7 @@ export interface ListData <P, LI> {
     updateData?:(params: LI|any) => Promise<AxiosResponse<any>>
     deleteData?:(params: Array<number>|any) => Promise<AxiosResponse<any>>
     addData?:(params: LI|any) => Promise<AxiosResponse<any>>
-    params?:P
+    params:P
     list:Array<LI>
     total?: number
     loading: boolean
