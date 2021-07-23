@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-22 10:23:09
- * @LastEditTime: 2021-07-22 10:42:03
+ * @LastEditTime: 2021-07-23 16:05:04
  * @LastEditors: yinzhegang
  * @Description: 
  * @FilePath: \basicServes\src\api\group.ts
@@ -29,6 +29,21 @@ export interface GroupAddParams {
 }
 export const groupAdd = (params: GroupAddParams) =>request.post(url.groupAdd, params)
 
+
+
+export interface GroupUpdateParams {
+    tenantId: number
+    groupId: number
+    groupName:string
+}
+export const groupUpdate = (params: GroupUpdateParams) =>request.post(url.groupUpdate, params)
+
+export interface GroupDeleteParams {
+    tenantId: number
+    groupId: number
+    type:number
+}
+export const groupDelete = (params: GroupDeleteParams) =>request.post(url.groupDelete, params)
 
 export interface GroupAddMemberParams {
     tenantId: number

@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-23 15:47:04
+ * @LastEditTime: 2021-07-23 16:37:50
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\group\index.vue
@@ -9,15 +9,16 @@
 -->
 <template>
    <div class="cont-right">
-     <el-dialog :title="groupData.detail.isEdit?'编辑用户组':'新增用户组'" :visible.sync="groupData.detail.visible">
-        <el-form style="width:50%;margin: 0 auto" size="small" label-width="100px" :rules="groupData.detail.rules" :model="groupData.detail.form">
+     <el-dialog :before-close="(d) => {
+ $refs.groupDataFormRef.clearValidate();d()
+}" :title="groupData.detail.isEdit?'编辑用户组':'新增用户组'" :visible.sync="groupData.detail.visible">
+        <el-form ref="groupDataFormRef" style="width:50%;margin: 0 auto" size="small" label-width="100px" :rules="groupData.detail.rules" :model="groupData.detail.form">
           <el-form-item prop="groupName" label="用户组名称">
               <el-input
                 type="text"
                 placeholder="请输入组名"
                 v-model="groupData.detail.form.groupName"
                 maxlength="10"
-                style="width:200px"
                 show-word-limit
                 />
           </el-form-item>
@@ -28,8 +29,8 @@
               </el-select>
           </el-form-item>
           <el-form-item prop="type">
-              <el-button type="primary">提 交</el-button>
-               <el-button>取消 </el-button>
+              <el-button @click="addData('groupDataFormRef')" type="primary">提 交</el-button>
+               <el-button @click="groupData.detail.visible = false">取消 </el-button>
           </el-form-item>
         </el-form>
 
@@ -120,7 +121,7 @@
         <template slot-scope="scope">
           <i @click="editDetail(scope.row)" class="el-icon-edit func-opr" style="cursor: pointer"></i>
           <el-divider direction="vertical"></el-divider>
-          <i @click="deptDelete(scope.row)"  class="el-icon-delete func-opr" style="cursor: pointer"></i>
+          <i @click="groupDelete(scope.row)"  class="el-icon-delete func-opr" style="cursor: pointer"></i>
         </template>
       </el-table-column>
       </el-table>
@@ -140,7 +141,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { ListData } from '../../../types/page'
-import { GroupListParams, groupList } from '@/api/group'
+import { GroupListParams, groupList, groupAdd, groupUpdate, groupDelete } from '@/api/group'
 
 @Component({
   name: 'group'
@@ -148,6 +149,9 @@ import { GroupListParams, groupList } from '@/api/group'
 export default class extends Vue {
   groupData:ListData<GroupListParams, any> = {
     getList: groupList,
+    addData: groupAdd,
+    updateData: groupUpdate,
+    deleteData: groupDelete,
     list: [],
     params: {
       current: 1,
@@ -162,7 +166,13 @@ export default class extends Vue {
       form: {},
       isEdit: false,
       visible: false,
-      rules: {}
+      rules: {
+        groupName: [
+          { required: true, message: '请输入用户组名称', trigger: 'blur' },
+          { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+        ],
+        type: { required: true, message: '请选择类型', trigger: 'blur' }
+      }
     },
     total: 0,
     loading: false
@@ -170,6 +180,30 @@ export default class extends Vue {
 
   created() {
     this.getList()
+  }
+
+  groupDelete(row:any) {
+    (this.groupData.deleteData as Function)({ ...row, tenantId: 183, creator: 1 }).then((res:any) => {
+      this.$message({
+        type: 'success',
+        message: '删除成功'
+      })
+      this.getList()
+    })
+  }
+
+  addData(ref:string) {
+    (this.$refs[ref] as any).validate((valid:boolean) => {
+      if (!valid) return
+      const isEdit:boolean = this.groupData.detail.isEdit as boolean
+      (this.groupData[isEdit ? 'updateData' : 'addData'] as Function)({ tenantId: 183, creator: 1, ...this.groupData.detail.form }).then((res:any) => {
+        this.$message({
+          message: isEdit ? '更新成功' : '添加成功',
+          type: 'success'
+        })
+        this.getList()
+      })
+    })
   }
 
   currentChange(val:number) {
@@ -184,7 +218,6 @@ export default class extends Vue {
   }
 
   getList() {
-    console.log(this.groupData.params)
     this.groupData.loading = true
     this.groupData.getList({ ...this.groupData.params, startTime: this.groupData.params.time[0], endTime: this.groupData.params.time[1] }).then((res:any) => {
       this.groupData.list = res.records
