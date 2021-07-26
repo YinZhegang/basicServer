@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-26 17:10:17
+ * @LastEditTime: 2021-07-26 17:29:46
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\auth\role\index.vue
@@ -70,15 +70,11 @@
           }" icon="el-icon-plus"
           >新增人角色</el-button-func
         >
-        <el-button-func  size="small"  icon="el-icon-edit"
-          >编辑</el-button-func
-        >
          </el-button-group>
          <el-divider direction="vertical"></el-divider>
         <el-button-func  size="small" icon="el-icon-delete"
           >删除</el-button-func
         >
-
       <!-- 数据列表 -->
       <el-table
         v-loading="roleData.loading"
@@ -103,8 +99,8 @@
               prop="activStatus"
               label="操作"
             >
-              <template>
-                    <i class="el-icon-edit func-opr" style="cursor: pointer"></i>
+              <template slot-scope="scope">
+                    <i @click="editRoleData(scope.row)" class="el-icon-edit func-opr" style="cursor: pointer"></i>
               </template>
             </el-table-column>
       </el-table>
@@ -199,6 +195,13 @@ export default class extends Vue {
         this.getList()
       })
     })
+  }
+
+  editRoleData(row:any) {
+    const data = JSON.parse(JSON.stringify(row))
+    this.roleData.detail.isEdit = true
+    this.roleData.detail.form = data
+    this.roleData.detail.visible = true
   }
 }
 </script>

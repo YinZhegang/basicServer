@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-26 16:40:14
+ * @LastEditTime: 2021-07-26 17:42:37
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -23,14 +23,15 @@
     <el-button-func
       size="small"
       style="float: right; cursor: pointer;margin:0  10px"
-      icon="el-icon-plus"
+      icon="el-icon-sort"
       @click="() => {
        deptSort.visible = true
 }"
       >部门排序</el-button-func
     >
-    <el-dialog :visible.sync="deptSort.visible" title="部门排序">
+    <el-dialog  :visible.sync="deptSort.visible" title="部门排序">
       <el-tree
+      style="height:500px;overflow:auto"
       :props="{
         label: 'deptName'
       }"
