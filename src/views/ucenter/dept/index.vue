@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-23 14:13:10
+ * @LastEditTime: 2021-07-26 11:49:58
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -9,7 +9,7 @@
 -->
 <template>
   <div>
-    <choose-member title="选择部门" :visible.sync="detpVisible"></choose-member>
+    <choose-member @get-one-dept="getOneDept" width="500px" title="选择部门" :visible.sync="detpVisible"></choose-member>
     <el-button-func
       size="small"
       style="float: right; cursor: pointer"
@@ -24,7 +24,8 @@
       <el-form
       size="small"
         :model="detail.form"
-        ref="ruleForm"
+        ref="detailForm"
+        :rules="detail.rules"
         label-width="80px"
         style="width:50%;margin:0 auto"
         class="demo-ruleForm"
@@ -32,14 +33,17 @@
         <el-form-item label="部门名称" prop="deptName">
           <el-input
             v-model="detail.form.deptName"
+             maxlength="10"
+                style="width:200px"
+                show-word-limit
             placeholder="请输入部门名称"
           ></el-input>
         </el-form-item>
         <el-form-item label="上级部门" prop="parentId">
-            <el-button icon="el-icon-edit" type="primary" plain @click="detpVisible = true">研发部</el-button>
+            <el-button icon="el-icon-edit" type="primary" plain @click="detpVisible = true">{{detail.form.parent?detail.form.parent.deptName:'请选择部门'}}</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="dialogVisible = false"
+          <el-button type="primary" @click="addDataMethod('detailForm')"
           >保存</el-button
         >
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -63,9 +67,7 @@
       row-key="deptId"
       lazy
       :load="loadMoreList"
-
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-      @row-click="rowClick"
     >
       <el-table-column :key="item +index" v-for="(item, index) in tableHeader" :prop="item.attrField" :label="item.attrName" >
       </el-table-column>
@@ -94,7 +96,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import { deptTop, deptList, deptOrder, deptDelete } from '@/api/dept'
+import { deptTop, deptList, deptOrder, deptDelete, deptGet, deptAdd, deptUpdate } from '@/api/dept'
 import { attrList } from '@/api/dict'
 @Component({
   name: 'dept',
@@ -109,11 +111,19 @@ export default class extends Vue {
   }
 
   detpVisible = false
-
+  addData:any = deptAdd
+  updateData:any = deptUpdate
   detail = {
     visible: false,
     isEdit: false,
-    form: {}
+    form: {},
+    rules: {
+      deptName: [
+        { required: true, message: '请输入部门名称', trigger: 'blur' },
+        { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+      ],
+      parentId: { required: true, message: '请选择上级部门', trigger: 'blur' }
+    }
   }
 
   tableHeader = []
@@ -150,6 +160,12 @@ export default class extends Vue {
     })
   }
 
+  getOneDept(dept:any) {
+    this.detpVisible = false
+    this.detail.form.parent = dept
+    this.detail.form.parentId = dept.deptId
+  }
+
   deptDelete(deptId:number) {
     deptDelete({ deptId }).then(() => {
       this.$message({
@@ -161,28 +177,28 @@ export default class extends Vue {
     })
   }
 
-  editDetail(row:any) {
+  async editDetail(row:any) {
     const data = JSON.parse(JSON.stringify(row))
     this.detail.visible = true
+    const deptDt:any = await deptGet({ deptId: data.deptId, detail: true })
     this.detail.form = data
+    this.detail.form.parent = deptDt
     this.detail.isEdit = true
   }
 
-  // 新增、编辑部门
-  dialogVisible = false;
-  dialogTitle = '';
-  ruleForm = {
-    department: '',
-    ParentName: ''
-  };
-
-  // 选择部门
-  checkDialogVisible = false;
-  searchValue = '';
-
-  checkedDepartmentList = [];
-  showCheckDialog() {
-    this.checkDialogVisible = true
+  addDataMethod(ref:string) {
+    (this.$refs[ref] as any).validate((valid:boolean) => {
+      if (!valid) return
+      this[this.detail.isEdit ? 'updateData' : 'addData'](this.detail.form).then(() => {
+        this.$message({
+          type: 'success',
+          message: this.detail.isEdit ? '修改成功' : '添加成功'
+        })
+        this.detail.visible = false
+        this.tableData = []
+        this.getDeptTop()
+      })
+    })
   }
 }
 </script>

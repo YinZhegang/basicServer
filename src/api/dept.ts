@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-21 17:24:23
- * @LastEditTime: 2021-07-23 13:56:06
+ * @LastEditTime: 2021-07-26 11:29:03
  * @LastEditors: yinzhegang
  * @Description: 
  * @FilePath: \basicServes\src\api\dept.ts
@@ -24,8 +24,8 @@ export interface DeptTopParams {
 }
 export const deptTop = (params: DeptTopParams) =>request.post(url.deptTop, params)
 
-export interface DeptGetParams extends Params {
-    tenantId?: number
+export interface DeptGetParams {
+    deptId?: number
     detail: boolean
 }
 export const deptGet = (params: DeptGetParams) =>request.post(url.deptGet, params)

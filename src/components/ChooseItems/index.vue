@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-13 18:07:40
+ * @LastEditTime: 2021-07-26 11:14:21
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\components\ChooseItems\index.vue
@@ -9,7 +9,7 @@
 -->
 <template>
     <el-dialog v-on="$listeners" v-bind="$attrs">
-      <Content></Content>
+      <Content @get-one-dept="(dept) => $emit('get-one-dept',dept)"></Content>
     </el-dialog>
 </template>
 

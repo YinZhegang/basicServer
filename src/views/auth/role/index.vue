@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-14 15:59:08
+ * @LastEditTime: 2021-07-26 10:25:45
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\auth\role\index.vue
@@ -78,9 +78,9 @@
       </el-table>
       <el-pagination
         style="float: right; overflow: hidden"
-        :current-page="params.current"
+        :current-page="roleData.params.current"
         :page-sizes="[5, 10, 20, 50]"
-        :page-size="params.size"
+        :page-size="roleData.params.size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
         @size-change="sizeChange"
@@ -92,6 +92,8 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
+import { roleList, RoleListParams } from '@/api/role'
+import { ListData } from '../../../types/page'
 
 @Component({
   name: 'role',
@@ -100,6 +102,41 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
   }
 })
 export default class extends Vue {
+  roleData:ListData<RoleListParams, any> ={
+    getList: roleList,
+    params: {
+      size: 10,
+      current: 1
+    },
+    detail: {
+      visible: false,
+      isEdit: false,
+      form: {}
+    },
+    list: [],
+    loading: false
+  }
+
+  currentChange(val:number) {
+    this.roleData.params.current = val
+    this.getList()
+  }
+
+  sizeChange(val:number) {
+    this.roleData.params.size = val
+    this.roleData.params.current = 1
+    this.getList()
+  }
+
+  getList() {
+    this.roleData.loading = true
+    this.roleData.getList({ ...this.roleData.params }).then((res:any) => {
+      this.roleData.list = res.records
+      this.roleData.total = res.total
+      this.roleData.loading = false
+    })
+  }
+
     steps =1
   activeName = 'first';
   input = '';

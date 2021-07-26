@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-19 13:21:32
- * @LastEditTime: 2021-07-22 10:41:01
+ * @LastEditTime: 2021-07-26 10:12:37
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\api\url.ts
@@ -32,5 +32,8 @@ export default {
   groupUpdate: `${baseUrl}${moduleName}/group/update`,
   groupDelete: `${baseUrl}${moduleName}/group/delete`,
   groupAddMember: `${baseUrl}${moduleName}/group/add/member`,
-  groupDeleteMember: `${baseUrl}${moduleName}/group/delete/member`
+  groupDeleteMember: `${baseUrl}${moduleName}/group/delete/member`,
+//   角色
+  roleList: `${baseUrl}${moduleName}/role/list`,
+  
 }
