@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-19 13:21:32
- * @LastEditTime: 2021-07-26 10:12:37
+ * @LastEditTime: 2021-07-26 16:36:54
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\api\url.ts
@@ -24,16 +24,20 @@ export default {
   deptList: `${baseUrl}${moduleName}/dept/list`,
   deptGet_batch:  `${baseUrl}${moduleName}/dept/get_batch`,
   deptOrder: `${baseUrl}${moduleName}/dept/order`,
+  deptMove:`${baseUrl}${moduleName}/dept/move`,
   deptUpdate: `${baseUrl}${moduleName}/dept/update`,
   deptDelete:  `${baseUrl}${moduleName}/dept/delete`,
 //   用户组
-  groupList: `${baseUrl}${moduleName}/group/list`,
-  groupAdd: `${baseUrl}${moduleName}/group/add`,
-  groupUpdate: `${baseUrl}${moduleName}/group/update`,
-  groupDelete: `${baseUrl}${moduleName}/group/delete`,
-  groupAddMember: `${baseUrl}${moduleName}/group/add/member`,
-  groupDeleteMember: `${baseUrl}${moduleName}/group/delete/member`,
+  groupList: `${baseUrl}${moduleName}/ac/group/list`,
+  groupAdd: `${baseUrl}${moduleName}/ac/group/add`,
+  groupUpdate: `${baseUrl}${moduleName}/ac/group/update`,
+  groupDelete: `${baseUrl}${moduleName}/ac/group/delete`,
+  groupAddMember: `${baseUrl}${moduleName}/ac/group/add/member`,
+  groupDeleteMember: `${baseUrl}${moduleName}/ac/group/delete/member`,
 //   角色
   roleList: `${baseUrl}${moduleName}/role/list`,
-  
+  roleAdd: `${baseUrl}${moduleName}/role/add`,
+  roleUpdate: `${baseUrl}${moduleName}/role/update`,
+
+
 }

@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-12 11:41:59
- * @LastEditTime: 2021-07-26 11:13:03
+ * @LastEditTime: 2021-07-26 13:12:19
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\components\ChooseItems\content.vue
@@ -19,7 +19,7 @@
                 <el-breadcrumb-item :key="'breadcrumb-item' +index" v-for="(item,index) in deptBread">
                   <span class="breadcrumb-item-span" @click="() => {
                     deptBread =  deptBread.slice(0,deptBread.indexOf(item))
-                    loadMoreList(item)
+                    loadMoreDeptList(item)
                     }">{{item.deptName}}</span>
                 </el-breadcrumb-item>
             </el-breadcrumb>
@@ -28,14 +28,19 @@
                 <comment :is="getChooseItemType"  :key="'deptList' +idx" v-for="(dept,idx) in deptList" :label="dept">
                   <div @click="(type.includes('dept')&&type.length ===1)&&getOneDept(dept)" class="main-dept-list-item">
                     <div><svg-icon :style="{color: theme}" name="tree" /><p>{{dept.deptName}}</p></div>
-                    <p @click.stop.prevent="loadMoreList(dept)" :style="{color: theme}"><svg-icon name="tree-table" />&nbsp;下级</p>
+                    <p @click.stop.prevent="loadMoreDeptList(dept)" :style="{color: theme}"><svg-icon name="tree-table" />&nbsp;下级</p>
                    </div>
                 </comment>
               </comment>
-               <!-- <div :key="user + ''" v-for="user in userList" class="main-dept-list-item hover">
-                   <div><svg-icon :style="{color: theme}" name="user" /><p>{{user.userName}}</p></div>
-                   <p :style="{color: theme}"><svg-icon name="tree-table" />&nbsp;下级</p>
-               </div> -->
+
+              <!-- <comment :is="getChooseComType" v-model="groupSelection">
+                <comment :is="getChooseItemType"  :key="'deptList' +idx" v-for="(dept,idx) in deptList" :label="dept">
+                  <div @click="(type.includes('dept')&&type.length ===1)&&getOneDept(dept)" class="main-dept-list-item">
+                    <div><svg-icon :style="{color: theme}" name="tree" /><p>{{dept.deptName}}</p></div>
+                    <p @click.stop.prevent="loadMoreDeptList(dept)" :style="{color: theme}"><svg-icon name="tree-table" />&nbsp;下级</p>
+                   </div>
+                </comment>
+              </comment> -->
             </div>
           </div>
           <div v-if="!(type.includes('dept')&&type.length ===1)" class="main-choose">
@@ -61,7 +66,7 @@
 import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
 import { SettingsModule } from '@/store/modules/settings'
 import { deptTop, deptList } from '@/api/dept'
-
+import { groupList } from '@/api/group'
 @Component({
   name: 'ChooseContent'
 })
@@ -69,9 +74,9 @@ export default class extends Vue {
   @Prop({ default: () => ['dept'] }) type: string[] // dept depts user users group groups
   @Prop({ default: '' }) searchType = ''
 
-   serachKey = ''
+   serachKey = '' // 搜索关键词
+   // 获取主题颜色
    get theme() {
-     console.log(SettingsModule)
      return SettingsModule.theme
    }
 
@@ -90,7 +95,7 @@ export default class extends Vue {
    deptList = []
    deptSelection=[]
    deptSelectionSelected = []
-   loadMoreList(dept:any) {
+   loadMoreDeptList(dept:any) {
      this.loading = true
      deptList({
        deptId: dept.deptId,

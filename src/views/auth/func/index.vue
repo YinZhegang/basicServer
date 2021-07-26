@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-14 16:20:30
+ * @LastEditTime: 2021-07-26 15:28:26
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\auth\func\index.vue
@@ -127,7 +127,7 @@ export default class extends Vue {
     steps =1
   activeName = 'first';
   input = '';
-  list = [{ activName: 11 }, { activName: 11 }, { activName: 11 }];
+  list = [];
   loading = false;
   params = {
     current: 0,

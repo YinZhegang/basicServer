@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-12 11:26:31
+ * @LastEditTime: 2021-07-26 12:48:14
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\auth\data\index.vue
@@ -9,7 +9,7 @@
 -->
 <template>
     <el-card>
-      <choose-member title="选择部门" :visible.sync="outerVisible"></choose-member>
+      <choose-member title="选择部门" :type="['depts']" :visible.sync="outerVisible"></choose-member>
     </el-card>
 </template>
 

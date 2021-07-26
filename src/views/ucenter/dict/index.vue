@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-22 15:26:40
+ * @LastEditTime: 2021-07-26 16:43:27
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dict\index.vue
@@ -78,6 +78,7 @@
         >新增用户字段</el-button-func>
         <br/>
         <br/>
+         <br/>
         <el-table
           v-loading="userData.loading"
           border
@@ -135,6 +136,7 @@
       <el-tab-pane label="部门字段" name="dept">
          <el-button-func @click="()=>{userData.detail.isEdit = false;userData.detail.form = {tenantId:1,form:2,tagList:[]};userData.detail.visible = true}" size="small" style="float: right" icon="el-icon-plus"
         >新增部门字段</el-button-func>
+        <br/>
         <br/>
         <br/>
           <el-table

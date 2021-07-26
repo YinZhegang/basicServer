@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-26 12:36:25
+ * @LastEditTime: 2021-07-26 17:10:17
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\auth\role\index.vue
@@ -9,18 +9,42 @@
 -->
 <template>
   <div class="cont-main">
+      <el-dialog :before-close="(d) => {
+        $refs.roleDataDetailRef.clearValidate()
+        d()
+}" :title="roleData.detail.isEdit?'编辑角色':'添加角色'" :visible.sync="roleData.detail.visible">
+        <el-form size="small" ref="roleDataDetailRef" style="width:50%;margin:0 auto" :rules="roleData.detail.rules" label-width="80px" :model="roleData.detail.form">
+            <el-form-item prop="roleName" label="角色名称">
+                <el-input
+                  type="text"
+                  placeholder="请输入角色名称"
+                  v-model="roleData.detail.form.roleName"
+                  maxlength="10"
+                  show-word-limit
+                />
+            </el-form-item>
+            <el-form-item prop="roleDesc" label="角色描述">
+                <el-input
+                  type="textarea"
+                  placeholder="请输入角色描述"
+                  v-model="roleData.detail.form.roleDesc"
+                  maxlength="200"
+                  show-word-limit
+                />
+            </el-form-item>
+            <el-form-item prop="roleDesc" label="角色描述">
+                <el-button @click="addRoleDataMethod('roleDataDetailRef')" type="primary">提交</el-button>
+                <el-button @click="roleData.detail.visible = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+      </el-dialog>
       <el-form
         style="float: left; overflow: hidden"
         size="small"
         :inline="true"
-        :model="params"
+        :model="roleData.params"
         ref="pub"
       >
-        <el-form-item>
-          <el-input v-model="roleData.params.roleName" placeholder="输入角色名称">
-          </el-input>
-        </el-form-item>
-
         <el-form-item>
           <el-date-picker
             v-model="roleData.params.time"
@@ -31,10 +55,19 @@
           >
           </el-date-picker>
         </el-form-item>
+         <el-form-item>
+          <el-input v-model="roleData.params.roleName" placeholder="输入角色名称">
+            <el-button @click="getList" slot="append" icon="el-icon-search"></el-button>
+          </el-input>
+        </el-form-item>
       </el-form>
 
       <el-button-group>
-        <el-button-func  size="small"  icon="el-icon-plus"
+        <el-button-func  size="small" @click="() => {
+          roleData.detail.form ={}
+          roleData.detail.isEdit = false
+          roleData.detail.visible = true
+          }" icon="el-icon-plus"
           >新增人角色</el-button-func
         >
         <el-button-func  size="small"  icon="el-icon-edit"
@@ -57,13 +90,13 @@
           color: '#333',
           borderBottom: '1px solid #d7dbe6'
         }"
-        :data="list"
+        :data="roleData.list"
       >
         <el-table-column prop="roleName" label="角色名称" />
         <el-table-column prop="roleDesc" label="角色描述" />
-        <el-table-column prop="startTime" label="用户数" />
-        <el-table-column prop="activStatus" label="创建者"> </el-table-column>
-        <el-table-column prop="activStatus" label="创建时间"> </el-table-column>
+        <el-table-column prop="userCount" label="用户数" />
+        <el-table-column prop="creator" label="创建者"> </el-table-column>
+        <el-table-column prop="createdTime" label="创建时间"> </el-table-column>
          <el-table-column
               width="150"
               align="center"
@@ -81,7 +114,7 @@
         :page-sizes="[5, 10, 20, 50]"
         :page-size="roleData.params.size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
+        :total="roleData.total"
         @size-change="sizeChange"
         @current-change="currentChange"
       />
@@ -91,7 +124,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import { roleList, RoleListParams } from '@/api/role'
+import { roleList, RoleListParams, roleAdd, roleUpdate } from '@/api/role'
 import { ListData } from '../../../types/page'
 
 @Component({
@@ -103,17 +136,31 @@ import { ListData } from '../../../types/page'
 export default class extends Vue {
   roleData:ListData<RoleListParams, any> ={
     getList: roleList,
+    addData: roleAdd,
+    updateData: roleUpdate,
     params: {
       size: 10,
-      current: 1
+      current: 1,
+      time: []
     },
     detail: {
       visible: false,
       isEdit: false,
-      form: {}
+      form: {},
+      rules: {
+        roleName: [
+          { required: true, message: '请输入角色名称', trigger: 'blur' },
+          { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+        ],
+        roleDesc: [
+          { required: true, message: '请输入角色描述', trigger: 'blur' },
+          { min: 1, max: 200, message: '长度在 1 到 200 个字符', trigger: 'blur' }
+        ]
+      }
     },
     list: [],
-    loading: false
+    loading: false,
+    total: 0
   }
 
   currentChange(val:number) {
@@ -133,96 +180,26 @@ export default class extends Vue {
 
   getList() {
     this.roleData.loading = true
-    this.roleData.getList({ ...this.roleData.params }).then((res:any) => {
+    this.roleData.getList({ ...this.roleData.params, tenantId: 1, creator: 1, beginTime: this.roleData.params.time[0], endTime: this.roleData.params.time[1] }).then((res:any) => {
       this.roleData.list = res.records
       this.roleData.total = res.total
       this.roleData.loading = false
     })
   }
 
-    steps =1
-  activeName = 'first';
-  input = '';
-  list = [{ activName: 11 }, { activName: 11 }, { activName: 11 }];
-  loading = false;
-  params = {
-    current: 0,
-    size: 10,
-    type: []
-  };
-
-  addUserFrom = {};
-
-  addUserFromRules = {};
-
-  addUser = {
-    visible: true
-  };
-
-  total = 10;
-
-  data: any = [
-    {
-      label: '部门1',
-      children: [
-        {
-          label: '二级 1-1',
-          children: [
-            {
-              label: '三级 1-1-1'
-            }
-          ]
-        }
-      ]
-    },
-    {
-      label: '部门2',
-      children: [
-        {
-          label: '二级 2-1',
-          children: [
-            {
-              label: '三级 2-1-1'
-            }
-          ]
-        },
-        {
-          label: '二级 2-2',
-          children: [
-            {
-              label: '三级 2-2-1'
-            }
-          ]
-        }
-      ]
-    },
-    {
-      label: '一级 3',
-      children: [
-        {
-          label: '二级 3-1',
-          children: [
-            {
-              label: '三级 3-1-1'
-            }
-          ]
-        },
-        {
-          label: '二级 3-2',
-          children: [
-            {
-              label: '三级 3-2-1'
-            }
-          ]
-        }
-      ]
-    }
-  ];
-
-  defaultProps: any = {
-    children: 'children',
-    label: 'label'
-  };
+  addRoleDataMethod(ref:string):void {
+    (this.$refs[ref] as any).validate((v:boolean) => {
+      if (!v) return
+      const isEdit:boolean = this.roleData.detail.isEdit as boolean
+      (this.roleData[isEdit ? 'updateData' : 'addData'] as Function)({ ...this.roleData.detail.form, status: 1, tenantId: 1, creator: 1 }).then(() => {
+        this.$message({
+          type: 'success',
+          message: isEdit ? '修改成功' : '添加成功'
+        })
+        this.getList()
+      })
+    })
+  }
 }
 </script>
 

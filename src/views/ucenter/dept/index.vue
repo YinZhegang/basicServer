@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-26 11:49:58
+ * @LastEditTime: 2021-07-26 16:40:14
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -16,10 +16,30 @@
       icon="el-icon-plus"
       @click="() => {
         detail.isEdit = false;
- detail.visible = true;detail.form={}
+        detail.visible = true;detail.form={}
 }"
       >新增部门</el-button-func
     >
+    <el-button-func
+      size="small"
+      style="float: right; cursor: pointer;margin:0  10px"
+      icon="el-icon-plus"
+      @click="() => {
+       deptSort.visible = true
+}"
+      >部门排序</el-button-func
+    >
+    <el-dialog :visible.sync="deptSort.visible" title="部门排序">
+      <el-tree
+      :props="{
+        label: 'deptName'
+      }"
+      :load="loadTreeMore"
+       draggable
+       @node-drop="handleDrop"
+       lazy>
+      </el-tree>
+    </el-dialog>
     <el-dialog :title="detail.isEdit?'编辑部门':'新增部门'" :visible.sync="detail.visible" width="50%">
       <el-form
       size="small"
@@ -53,6 +73,7 @@
     </el-dialog>
     <br />
     <br />
+     <br />
     <el-table
       border
       stripe
@@ -96,7 +117,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import { deptTop, deptList, deptOrder, deptDelete, deptGet, deptAdd, deptUpdate } from '@/api/dept'
+import { deptTop, deptList, deptOrder, deptMove, deptDelete, deptGet, deptAdd, deptUpdate } from '@/api/dept'
 import { attrList } from '@/api/dict'
 @Component({
   name: 'dept',
@@ -110,6 +131,11 @@ export default class extends Vue {
     this.getDeptTop()
   }
 
+  deptSort = {
+    visible: false
+  }
+
+  topDept = ''
   detpVisible = false
   addData:any = deptAdd
   updateData:any = deptUpdate
@@ -139,6 +165,7 @@ export default class extends Vue {
 
   getDeptTop() {
     deptTop({ tenantId: 183, detail: true }).then((res:any) => {
+      this.topDept = res
       console.log(this.formatDeptList([res]))
       this.tableData = this.formatDeptList([res])
       // console.log(res)
@@ -150,6 +177,53 @@ export default class extends Vue {
   }
 
   tableData = [];
+  loadTreeMore(node:any, resolve:any) {
+    if (node.level === 0) {
+      return resolve([this.topDept])
+    }
+    deptList({
+      deptId: node.data.deptId,
+      detail: true
+    }).then((res:any) => {
+      resolve(res)
+    })
+  }
+
+  handleDrop(draggingNode:any, dropNode:any, dropType:any) {
+    console.log({ items: dropNode.parent.childNodes })
+    if (dropType == 'inner') {
+      const dataNodeInner:any = []
+      for (let i = 0; i < dropNode.childNodes.length; i++) {
+        dataNodeInner.push({ deptId: dropNode.childNodes[i].data.deptId, deptOrder: i })
+      }
+      // this.$POST('dept/sort', {items: dropNode.parent.data.}).then(res => {
+      // })
+      deptMove({ parentId: dropNode.data.deptId, deptId: draggingNode.data.deptId }).then(res => {
+        deptOrder({ items: dataNodeInner }).then(res => {
+          this.$message({
+            type: 'success',
+            message: '移动成功!'
+          })
+        })
+      })
+      console.log('tree drop: ', dropNode.label, dropType)
+    } else {
+      const dataNode:any = []
+      for (let i = 0; i < dropNode.parent.childNodes.length; i++) {
+        dataNode.push({ deptId: dropNode.parent.childNodes[i].data.deptId, deptOrder: i })
+      }
+      deptMove({ parentId: dropNode.parent.data.deptId, deptId: draggingNode.data.deptId }).then(res => {
+        deptOrder({ items: dataNode }).then(res => {
+          this.$message({
+            type: 'success',
+            message: '排序成功!'
+          })
+        })
+      })
+      console.log('tree drop: ', dropNode.label, dropType)
+    }
+  }
+
   loadMoreList(tree:any, treeNode:any, resolve:any) {
     console.log(tree, treeNode)
     deptList({

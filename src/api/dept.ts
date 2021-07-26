@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-21 17:24:23
- * @LastEditTime: 2021-07-26 11:29:03
+ * @LastEditTime: 2021-07-26 16:38:09
  * @LastEditors: yinzhegang
  * @Description: 
  * @FilePath: \basicServes\src\api\dept.ts
@@ -44,10 +44,17 @@ export interface DeptGet_batchParams extends Params {
 export const deptGet_batch = (params: DeptGet_batchParams) =>request.post(url.deptGet_batch, params)
 
 
-export interface DeptOrderParams extends Params {
+export interface DeptOrderParams {
     items: {deptId:number,deptOrder:number}[]
 }
 export const deptOrder = (params: DeptOrderParams) =>request.post(url.deptOrder, params)
+
+export interface DeptMoveParams {
+    deptId: number
+    parentId:number
+}
+export const deptMove = (params: DeptMoveParams) =>request.post(url.deptMove, params)
+
 
 export interface DeptUpdateParams extends Params {
     deptId:number,
