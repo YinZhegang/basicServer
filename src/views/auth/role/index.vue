@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-26 10:25:45
+ * @LastEditTime: 2021-07-26 12:36:25
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\auth\role\index.vue
@@ -9,7 +9,6 @@
 -->
 <template>
   <div class="cont-main">
-    <div class="cont-right">
       <el-form
         style="float: left; overflow: hidden"
         size="small"
@@ -18,13 +17,13 @@
         ref="pub"
       >
         <el-form-item>
-          <el-input v-model="params.name" placeholder="输入角色名称">
+          <el-input v-model="roleData.params.roleName" placeholder="输入角色名称">
           </el-input>
         </el-form-item>
 
         <el-form-item>
           <el-date-picker
-            v-model="params.value1"
+            v-model="roleData.params.time"
             type="datetimerange"
             range-separator="至"
             start-placeholder="开始日期"
@@ -49,7 +48,7 @@
 
       <!-- 数据列表 -->
       <el-table
-        v-loading="loading"
+        v-loading="roleData.loading"
         border
         stripe
         size="small"
@@ -60,8 +59,8 @@
         }"
         :data="list"
       >
-        <el-table-column prop="activName" label="角色名称" />
-        <el-table-column prop="orgaName" label="角色描述" />
+        <el-table-column prop="roleName" label="角色名称" />
+        <el-table-column prop="roleDesc" label="角色描述" />
         <el-table-column prop="startTime" label="用户数" />
         <el-table-column prop="activStatus" label="创建者"> </el-table-column>
         <el-table-column prop="activStatus" label="创建时间"> </el-table-column>
@@ -86,7 +85,7 @@
         @size-change="sizeChange"
         @current-change="currentChange"
       />
-    </div>
+
   </div>
 </template>
 
@@ -125,6 +124,10 @@ export default class extends Vue {
   sizeChange(val:number) {
     this.roleData.params.size = val
     this.roleData.params.current = 1
+    this.getList()
+  }
+
+  created() {
     this.getList()
   }
 
