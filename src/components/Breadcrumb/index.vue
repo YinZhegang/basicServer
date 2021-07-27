@@ -5,7 +5,7 @@
   >
     <transition-group name="breadcrumb">
       <el-breadcrumb-item
-        v-for="(item, index) in breadcrumbs"
+        v-for="(item, index) in breadcrumbs.slice(1)"
         :key="item.path"
       >
         <span

@@ -75,25 +75,37 @@ export const constantRoutes: RouteConfig[] = [
     meta: { hidden: true }
   },
 
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   redirect: '/dashboard',
+  //   children: [
+  //     {
+  //       path: 'dashboard',
+  //       component: () => import(/* webpackChunkName: "dashboard" */ '@/views/dashboard/index.vue'),
+  //       name: 'Dashboard',
+  //       meta: {
+  //         title: 'dashboard',
+  //         icon: 'dashboard',
+  //         affix: true
+  //       }
+  //     }
+  //   ]
+  // },
   {
-    path: '/',
+    path: '/center',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/center/ucenter/dept',
+    meta: {
+      title: '企业管理',
+      icon: 'dashboard',
+      affix: true
+    },
     children: [
-      {
-        path: 'dashboard',
-        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/dashboard/index.vue'),
-        name: 'Dashboard',
-        meta: {
-          title: 'dashboard',
-          icon: 'dashboard',
-          affix: true
-        }
-      }
+      ucenterRoutes,
+      authRoutes
     ]
   },
-  ucenterRoutes,
-  authRoutes,
   // {
   //   path: '/documentation',
   //   component: Layout,
@@ -106,23 +118,26 @@ export const constantRoutes: RouteConfig[] = [
   //     }
   //   ]
   // },
-  {
-    path: '/guide',
-    component: Layout,
-    redirect: '/guide/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import(/* webpackChunkName: "guide" */ '@/views/guide/index.vue'),
-        name: 'Guide',
-        meta: {
-          title: 'guide',
-          icon: 'guide',
-          noCache: true
-        }
-      }
-    ]
-  },
+
+
+
+  // {
+  //   path: '/guide',
+  //   component: Layout,
+  //   redirect: '/guide/index',
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import(/* webpackChunkName: "guide" */ '@/views/guide/index.vue'),
+  //       name: 'Guide',
+  //       meta: {
+  //         title: 'guide',
+  //         icon: 'guide',
+  //         noCache: true
+  //       }
+  //     }
+  //   ]
+  // },
   {
     path: '/profile',
     component: Layout,
@@ -147,7 +162,8 @@ export const constantRoutes: RouteConfig[] = [
  * asyncRoutes
  * the routes that need to be dynamically loaded based on user roles
 */
-export const asyncRoutes: RouteConfig[] = [
+export const asyncRoutes: RouteConfig[] = []
+export const asyncRoutesCopy: RouteConfig[] = [
   {
     path: '/permission',
     component: Layout,

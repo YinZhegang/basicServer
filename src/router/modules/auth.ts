@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:40:33
- * @LastEditTime: 2021-07-12 15:04:58
+ * @LastEditTime: 2021-07-27 14:53:19
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\router\modules\auth.ts
@@ -9,11 +9,12 @@
  */
 import { RouteConfig } from 'vue-router'
 import Layout from '@/layout/index.vue'
+import AppMain from '@/layout/components/AppMain.vue'
 
 const authRoutes: RouteConfig = {
-  path: '/auth',
-  component: Layout,
-  redirect: '/auth/role',
+  path: 'auth',
+  component: AppMain,
+  redirect: 'auth/role',
   name: 'Ucenter',
   meta: {
     title: '权限管理',

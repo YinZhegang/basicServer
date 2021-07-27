@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-26 16:43:27
+ * @LastEditTime: 2021-07-27 14:36:24
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dict\index.vue
@@ -9,8 +9,8 @@
 -->
 <template>
   <div>
-    <el-dialog :before-close="(d)=>{$refs.userAddForm.resetFields();d()}" :visible.sync="userData.detail.visible" :title="(userData.detail.isEdit?'编辑':'添加')+(userData.detail.form.form==1?'用户字段':'部门字段')">
-      <el-form ref="userAddForm" size="small" :rules="userData.detail.rules" :model="userData.detail.form" label-width="100px">
+    <el-dialog :before-close="(d)=>{$refs.userAddForm.clearValidate();d()}" :visible.sync="userData.detail.visible" :title="(userData.detail.isEdit?'编辑':'添加')+(userData.detail.form.form==1?'用户字段':'部门字段')">
+      <el-form style="width:50%;margin:0 auto" ref="userAddForm" size="small" :rules="userData.detail.rules" :model="userData.detail.form" label-width="100px">
           <el-form-item prop="attrName" label="字段名称">
               <el-input
                 type="text"
@@ -67,7 +67,7 @@
           </el-form-item>
           <el-form-item>
               <el-button @click="attrAddMethod(1,'userAddForm')" type="primary">确定</el-button>
-              <el-button @click="userData.detail.visible = false">取消</el-button>
+              <el-button @click="()=>{$refs.userAddForm.clearValidate();userData.detail.visible = false}">取消</el-button>
           </el-form-item>
       </el-form>
     </el-dialog>
@@ -222,7 +222,7 @@ export default class extends Vue {
       tenantId: 1
     },
     detail:{
-      form:{tenantId:1,form:1,creator:973,tagList:[]},
+      form:{tenantId:183,form:1,creator:973,tagList:[]},
       isEdit:false,
       rules:{
         attrName:[

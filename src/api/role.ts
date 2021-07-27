@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-26 10:12:45
- * @LastEditTime: 2021-07-26 15:46:18
+ * @LastEditTime: 2021-07-27 10:35:37
  * @LastEditors: yinzhegang
  * @Description: 
  * @FilePath: \basicServes\src\api\role.ts
@@ -52,3 +52,10 @@ export interface RoleUpdateParams {
 }
 
 export const roleUpdate = (params: RoleUpdateParams) =>request.post(url.roleUpdate, params)
+
+
+export interface RoleDeletebatchParams {
+    roleIds: number[]
+}
+export const roleDeletebatch = (params: RoleDeletebatchParams) =>request.post(url.roleDeletebatch, params)
+

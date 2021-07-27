@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-12 11:41:59
- * @LastEditTime: 2021-07-26 13:12:19
+ * @LastEditTime: 2021-07-27 13:56:51
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\components\ChooseItems\content.vue
@@ -25,7 +25,7 @@
             </el-breadcrumb>
             <div v-loading="loading" class="main-dept-list">
               <comment :is="getChooseComType" v-model="deptSelection">
-                <comment :is="getChooseItemType"  :key="'deptList' +idx" v-for="(dept,idx) in deptList" :label="dept">
+                <comment class="hover" :is="getChooseItemType"  :key="'deptList' +idx" v-for="(dept,idx) in deptList" :label="dept">
                   <div @click="(type.includes('dept')&&type.length ===1)&&getOneDept(dept)" class="main-dept-list-item">
                     <div><svg-icon :style="{color: theme}" name="tree" /><p>{{dept.deptName}}</p></div>
                     <p @click.stop.prevent="loadMoreDeptList(dept)" :style="{color: theme}"><svg-icon name="tree-table" />&nbsp;下级</p>

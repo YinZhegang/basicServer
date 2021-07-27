@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-26 17:29:46
+ * @LastEditTime: 2021-07-27 14:01:17
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\auth\role\index.vue
@@ -32,9 +32,11 @@
                   show-word-limit
                 />
             </el-form-item>
-            <el-form-item prop="roleDesc" label="角色描述">
+            <el-form-item>
                 <el-button @click="addRoleDataMethod('roleDataDetailRef')" type="primary">提交</el-button>
-                <el-button @click="roleData.detail.visible = false">取消</el-button>
+                <el-button @click="() => {
+ $refs.roleDataDetailRef.clearValidate();roleData.detail.visible = false
+}">取消</el-button>
             </el-form-item>
         </el-form>
       </el-dialog>
@@ -72,7 +74,7 @@
         >
          </el-button-group>
          <el-divider direction="vertical"></el-divider>
-        <el-button-func  size="small" icon="el-icon-delete"
+        <el-button-func @click="delRoleDatas(roleData.selections)" size="small" icon="el-icon-delete"
           >删除</el-button-func
         >
       <!-- 数据列表 -->
@@ -87,13 +89,20 @@
           borderBottom: '1px solid #d7dbe6'
         }"
         :data="roleData.list"
+         @selection-change="(val) => {
+ roleData.selections =val
+}"
       >
+       <el-table-column
+      type="selection"
+      align="center"
+      width="55" />
         <el-table-column prop="roleName" label="角色名称" />
         <el-table-column prop="roleDesc" label="角色描述" />
         <el-table-column prop="userCount" label="用户数" />
-        <el-table-column prop="creator" label="创建者"> </el-table-column>
+        <el-table-column prop="creatorName" label="创建者"> </el-table-column>
         <el-table-column prop="createdTime" label="创建时间"> </el-table-column>
-         <el-table-column
+        <el-table-column
               width="150"
               align="center"
               prop="activStatus"
@@ -101,6 +110,8 @@
             >
               <template slot-scope="scope">
                     <i @click="editRoleData(scope.row)" class="el-icon-edit func-opr" style="cursor: pointer"></i>
+                    <el-divider direction="vertical"></el-divider>
+                    <i @click="delRoleDatas([scope.row])" class="el-icon-delete func-opr" style="cursor: pointer"></i>
               </template>
             </el-table-column>
       </el-table>
@@ -120,7 +131,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import { roleList, RoleListParams, roleAdd, roleUpdate } from '@/api/role'
+import { roleList, RoleListParams, roleAdd, roleUpdate, roleDeletebatch } from '@/api/role'
 import { ListData } from '../../../types/page'
 
 @Component({
@@ -139,6 +150,7 @@ export default class extends Vue {
       current: 1,
       time: []
     },
+    selections: [],
     detail: {
       visible: false,
       isEdit: false,
@@ -176,7 +188,7 @@ export default class extends Vue {
 
   getList() {
     this.roleData.loading = true
-    this.roleData.getList({ ...this.roleData.params, tenantId: 1, creator: 1, beginTime: this.roleData.params.time[0], endTime: this.roleData.params.time[1] }).then((res:any) => {
+    this.roleData.getList({ ...this.roleData.params, tenantId: 183, beginTime: this.roleData.params.time ? this.roleData.params.time[0] : '', endTime: this.roleData.params.time ? this.roleData.params.time[1] : '' }).then((res:any) => {
       this.roleData.list = res.records
       this.roleData.total = res.total
       this.roleData.loading = false
@@ -187,12 +199,13 @@ export default class extends Vue {
     (this.$refs[ref] as any).validate((v:boolean) => {
       if (!v) return
       const isEdit:boolean = this.roleData.detail.isEdit as boolean
-      (this.roleData[isEdit ? 'updateData' : 'addData'] as Function)({ ...this.roleData.detail.form, status: 1, tenantId: 1, creator: 1 }).then(() => {
+      (this.roleData[isEdit ? 'updateData' : 'addData'] as Function)({ ...this.roleData.detail.form, status: 1, tenantId: 183, creator: 1 }).then(() => {
         this.$message({
           type: 'success',
           message: isEdit ? '修改成功' : '添加成功'
         })
         this.getList()
+        this.roleData.detail.visible = false
       })
     })
   }
@@ -202,6 +215,23 @@ export default class extends Vue {
     this.roleData.detail.isEdit = true
     this.roleData.detail.form = data
     this.roleData.detail.visible = true
+  }
+
+  delRoleDatas(rows:any[]) {
+    if (!rows.length) {
+      this.$message({
+        type: 'warning',
+        message: '请选择角色'
+      })
+      return
+    }
+    roleDeletebatch({ roleIds: rows.map((i:any) => i.roleId) }).then(() => {
+      this.$message({
+        type: 'success',
+        message: '删除成功'
+      })
+      this.getList()
+    })
   }
 }
 </script>

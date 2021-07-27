@@ -86,7 +86,7 @@ export default class extends Vue {
   }
 
   .el-scrollbar__wrap {
-    height: 49px;
+    height: 70px;
   }
 }
 </style>

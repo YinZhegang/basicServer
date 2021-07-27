@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:40:33
- * @LastEditTime: 2021-07-12 15:03:06
+ * @LastEditTime: 2021-07-27 17:22:24
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\router\modules\ucenter.ts
@@ -9,11 +9,12 @@
  */
 import { RouteConfig } from 'vue-router'
 import Layout from '@/layout/index.vue'
+import AppMain from '@/layout/components/AppMain.vue'
 
 const ucenterRoutes: RouteConfig = {
-  path: '/ucenter',
-  component: Layout,
-  redirect: '/ucenter/person',
+  path: 'ucenter',
+  component: AppMain,
+  redirect: 'ucenter/dept',
   name: 'Ucenter',
   meta: {
     title: '用户中心',

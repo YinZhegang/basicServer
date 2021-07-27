@@ -29,7 +29,6 @@
           autocomplete="on"
         />
       </el-form-item>
-
       <el-tooltip
         v-model="capsTooltip"
         content="Caps lock is On"

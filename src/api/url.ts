@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-19 13:21:32
- * @LastEditTime: 2021-07-26 16:36:54
+ * @LastEditTime: 2021-07-27 10:34:32
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\api\url.ts
@@ -38,6 +38,6 @@ export default {
   roleList: `${baseUrl}${moduleName}/role/list`,
   roleAdd: `${baseUrl}${moduleName}/role/add`,
   roleUpdate: `${baseUrl}${moduleName}/role/update`,
-
-
+  roleDeletebatch: `${baseUrl}${moduleName}/role/deletebatch`
+ 
 }

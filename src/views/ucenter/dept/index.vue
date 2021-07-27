@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-26 17:42:37
+ * @LastEditTime: 2021-07-27 14:28:03
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -54,7 +54,7 @@
         <el-form-item label="部门名称" prop="deptName">
           <el-input
             v-model="detail.form.deptName"
-             maxlength="10"
+            maxlength="10"
                 style="width:200px"
                 show-word-limit
             placeholder="请输入部门名称"
@@ -74,7 +74,7 @@
     </el-dialog>
     <br />
     <br />
-     <br />
+    <br />
     <el-table
       border
       stripe
@@ -93,18 +93,6 @@
     >
       <el-table-column :key="item +index" v-for="(item, index) in tableHeader" :prop="item.attrField" :label="item.attrName" >
       </el-table-column>
-      <!-- <el-table-column
-            width="150"
-            align="center"
-            label="排序"
-          >
-            <template slot-scope="scope">
-              <el-button-group>
-                <el-button @click="sort(1,scope,1)" size="mini" icon="el-icon-arrow-up"></el-button>
-                <el-button @click="sort(1,scope,0)" size="mini" icon="el-icon-arrow-down"></el-button>
-              </el-button-group>
-            </template>
-      </el-table-column> -->
       <el-table-column width="100" align="center" label="操作">
         <template slot-scope="scope">
           <i @click="editDetail(scope.row)" class="el-icon-edit func-opr" style="cursor: pointer"></i>
@@ -180,6 +168,7 @@ export default class extends Vue {
   tableData = [];
   loadTreeMore(node:any, resolve:any) {
     if (node.level === 0) {
+      console.log(node)
       return resolve([this.topDept])
     }
     deptList({

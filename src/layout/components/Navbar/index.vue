@@ -10,7 +10,7 @@
       id="breadcrumb-container"
       class="breadcrumb-container"
     />
-    <div class="right-menu">
+    <!-- <div class="right-menu">
       <template v-if="device!=='mobile'">
         <header-search class="right-menu-item" />
         <error-log class="errLog-container right-menu-item hover-effect" />
@@ -70,7 +70,7 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-    </div>
+    </div> -->
   </div>
 </template>
 

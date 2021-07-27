@@ -12,7 +12,7 @@
         v-for="tag in visitedViews"
         ref="tag"
         :key="tag.path"
-        :style="{'background-color': isActive(tag)?theme:'#fff',borderColor: isActive(tag)?theme:'#d8dce5'}"
+        :style="{'color': isActive(tag)?theme:''}"
         :class="isActive(tag) ? 'active' : ''"
         :to="{path: tag.path, query: tag.query, fullPath: tag.fullPath}"
         class="tags-view-item"
@@ -27,6 +27,68 @@
         />
       </router-link>
     </scroll-pane>
+     <div class="right-menu">
+      <!-- <template v-if="device!=='mobile'">
+        <header-search class="right-menu-item" />
+        <error-log class="errLog-container right-menu-item hover-effect" />
+        <screenfull class="right-menu-item hover-effect" />
+        <el-tooltip
+          :content="$t('navbar.size')"
+          effect="dark"
+          placement="bottom"
+        >
+          <size-select class="right-menu-item hover-effect" />
+        </el-tooltip>
+        <lang-select class="right-menu-item hover-effect" />
+      </template> -->
+      <el-dropdown
+        class="avatar-container right-menu-item hover-effect"
+        trigger="click"
+      >
+        <div class="avatar-wrapper">
+          <!-- <img
+            :src="avatar+'?imageView2/1/w/80/h/80'"
+            class="user-avatar"
+          > -->
+          <div style="font-size:14px">欢迎，admin</div>
+          <i class="el-icon-caret-bottom" />
+        </div>
+        <el-dropdown-menu slot="dropdown">
+          <router-link to="/profile/">
+            <el-dropdown-item>
+              {{ $t('navbar.profile') }}
+            </el-dropdown-item>
+          </router-link>
+          <router-link to="/">
+            <el-dropdown-item>
+              {{ $t('navbar.dashboard') }}
+            </el-dropdown-item>
+          </router-link>
+          <a
+            target="_blank"
+            href="https://github.com/armour/vue-typescript-admin-template/"
+          >
+            <el-dropdown-item>
+              {{ $t('navbar.github') }}
+            </el-dropdown-item>
+          </a>
+          <a
+            target="_blank"
+            href="https://armour.github.io/vue-typescript-admin-docs/"
+          >
+            <el-dropdown-item>Docs</el-dropdown-item>
+          </a>
+          <el-dropdown-item
+            divided
+            @click.native="logout"
+          >
+            <span style="display:block;">
+              {{ $t('navbar.logOut') }}
+            </span>
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
     <ul
       v-show="visible"
       :style="{left: left+'px', top: top+'px'}"
@@ -60,6 +122,8 @@ import { PermissionModule } from '@/store/modules/permission'
 import { TagsViewModule, ITagView } from '@/store/modules/tags-view'
 import ScrollPane from './ScrollPane.vue'
 import { SettingsModule } from '@/store/modules/settings'
+import { AppModule } from '@/store/modules/app'
+import { UserModule } from '@/store/modules/user'
 
 @Component({
   name: 'TagsView',
@@ -79,6 +143,18 @@ export default class extends Vue {
 
   get visitedViews() {
     return TagsViewModule.visitedViews
+  }
+
+  get sidebar() {
+    return AppModule.sidebar
+  }
+
+  get device() {
+    return AppModule.device.toString()
+  }
+
+  get avatar() {
+    return UserModule.avatar
   }
 
   get routes() {
@@ -250,6 +326,13 @@ export default class extends Vue {
   private handleScroll() {
     this.closeMenu()
   }
+
+  private async logout() {
+    await UserModule.LogOut()
+    this.$router.push(`/login?redirect=${this.$route.fullPath}`).catch(err => {
+      console.warn(err)
+    })
+  }
 }
 </script>
 
@@ -258,11 +341,13 @@ export default class extends Vue {
 .tags-view-wrapper {
   .tags-view-item {
     .el-icon-close {
-      width: 16px;
-      height: 16px;
-      vertical-align: 2px;
+      width: 22px;
+      height: 22px;
+      vertical-align: 0px;
       border-radius: 50%;
       text-align: center;
+      font-size: 22px;
+      line-height: 18px;
       transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
       transform-origin: 100% 50%;
 
@@ -282,27 +367,27 @@ export default class extends Vue {
 </style>
 <style lang="scss" scoped>
 .tags-view-container {
-  height: 34px;
+  height: 50px;
   width: 100%;
-  background: #fff;
-  border-bottom: 1px solid #d8dce5;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
-
+  background: #ECEBEE;
+  position: relative;
+  // border-bottom: 1px solid #d8dce5;
+  // box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
   .tags-view-wrapper {
     .tags-view-item {
       display: inline-block;
       position: relative;
       cursor: pointer;
-      height: 26px;
-      line-height: 26px;
-      border: 1px solid #d8dce5;
+      height: 36px;
+      line-height: 36px;
+      // border: 1px solid #d8dce5;
       color: #495060;
-      background: #fff;
-      padding: 0 8px;
-      font-size: 12px;
+      background: #ECEBEE;
+      font-size: 15px;
       margin-left: 5px;
-      margin-top: 4px;
-
+      padding: 0 10px;
+      margin-top: 10px;
+      bottom: -5px;
       &:first-of-type {
         margin-left: 15px;
       }
@@ -312,20 +397,20 @@ export default class extends Vue {
       }
 
       &.active {
-        background-color: #42b983;
-        color: #fff;
-        border-color: #42b983;
-
-        &::before {
-          content: '';
-          background: #fff;
-          display: inline-block;
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          position: relative;
-          margin-right: 2px;
-        }
+        background-color: #fff;
+        border-color: #ecebee;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        // &::before {
+        //   content: '';
+        //   background: #fff;
+        //   display: inline-block;
+        //   width: 8px;
+        //   height: 8px;
+        //   border-radius: 50%;
+        //   position: relative;
+        //   margin-right: 2px;
+        // }
       }
     }
   }
@@ -354,4 +439,59 @@ export default class extends Vue {
     }
   }
 }
+
+.right-menu {
+    position: absolute;
+    height: 100%;
+    top: 0px;
+    right: 10px;
+    z-index: 10000;
+    cursor: pointer;
+    line-height: 60px;
+    &:focus {
+      outline: none;
+    }
+
+    .right-menu-item {
+      display: inline-block;
+      // padding: 0 8px;
+      height: 100%;
+      font-size: 18px;
+      color: #5a5e66;
+      vertical-align: text-bottom;
+
+      &.hover-effect {
+        cursor: pointer;
+        transition: background .3s;
+
+        &:hover {
+          background: rgba(0, 0, 0, .025)
+        }
+      }
+    }
+
+    .avatar-container {
+      margin-right: 30px;
+
+      .avatar-wrapper {
+        // margin-top: 5px;
+        position: relative;
+
+        .user-avatar {
+          cursor: pointer;
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+        }
+
+        .el-icon-caret-bottom {
+          cursor: pointer;
+          position: absolute;
+          right: -20px;
+          top: 25px;
+          font-size: 12px;
+        }
+      }
+    }
+  }
 </style>

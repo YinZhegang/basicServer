@@ -73,7 +73,7 @@ export default {
     profile: '个人中心'
   },
   login: {
-    title: '系统登录',
+    title: '基础服务登陆',
     logIn: '登录',
     username: '账号',
     password: '密码',
