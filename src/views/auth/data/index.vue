@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-26 12:48:14
+ * @LastEditTime: 2021-07-28 09:37:42
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\auth\data\index.vue
@@ -19,7 +19,7 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
 @Component({
   name: 'data',
   components: {
-    ChooseMember: () => import('@/components/ChooseItems')
+    ChooseMember: () => import('@/components/ChooseItems/index.vue')
   }
 })
 export default class extends Vue {

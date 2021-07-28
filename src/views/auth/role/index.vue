@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-27 14:01:17
+ * @LastEditTime: 2021-07-28 10:08:01
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\auth\role\index.vue
@@ -19,7 +19,7 @@
                   type="text"
                   placeholder="请输入角色名称"
                   v-model="roleData.detail.form.roleName"
-                  maxlength="10"
+                  maxlength="50"
                   show-word-limit
                 />
             </el-form-item>
@@ -28,7 +28,7 @@
                   type="textarea"
                   placeholder="请输入角色描述"
                   v-model="roleData.detail.form.roleDesc"
-                  maxlength="200"
+                  maxlength="100"
                   show-word-limit
                 />
             </el-form-item>
@@ -97,11 +97,11 @@
       type="selection"
       align="center"
       width="55" />
-        <el-table-column prop="roleName" label="角色名称" />
-        <el-table-column prop="roleDesc" label="角色描述" />
-        <el-table-column prop="userCount" label="用户数" />
-        <el-table-column prop="creatorName" label="创建者"> </el-table-column>
-        <el-table-column prop="createdTime" label="创建时间"> </el-table-column>
+        <el-table-column align="center" prop="roleName" label="角色名称" />
+        <el-table-column align="center" prop="roleDesc" label="角色描述" />
+        <el-table-column align="center" prop="userCount" label="用户数" />
+        <el-table-column align="center" prop="creatorName" label="创建者"> </el-table-column>
+        <el-table-column align="center" prop="createdTime" label="创建时间"> </el-table-column>
         <el-table-column
               width="150"
               align="center"
@@ -158,11 +158,11 @@ export default class extends Vue {
       rules: {
         roleName: [
           { required: true, message: '请输入角色名称', trigger: 'blur' },
-          { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+          { min: 1, max: 10, message: '长度在 1 到 50 个字符', trigger: 'blur' }
         ],
         roleDesc: [
           { required: true, message: '请输入角色描述', trigger: 'blur' },
-          { min: 1, max: 200, message: '长度在 1 到 200 个字符', trigger: 'blur' }
+          { min: 1, max: 200, message: '长度在 1 到 100 个字符', trigger: 'blur' }
         ]
       }
     },

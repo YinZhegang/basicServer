@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-23 16:37:50
+ * @LastEditTime: 2021-07-28 10:10:54
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\group\index.vue
@@ -18,7 +18,7 @@
                 type="text"
                 placeholder="请输入组名"
                 v-model="groupData.detail.form.groupName"
-                maxlength="10"
+                maxlength="50"
                 show-word-limit
                 />
           </el-form-item>
@@ -169,7 +169,7 @@ export default class extends Vue {
       rules: {
         groupName: [
           { required: true, message: '请输入用户组名称', trigger: 'blur' },
-          { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+          { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
         ],
         type: { required: true, message: '请选择类型', trigger: 'blur' }
       }

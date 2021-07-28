@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-27 14:36:24
+ * @LastEditTime: 2021-07-28 10:16:52
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dict\index.vue
@@ -91,19 +91,19 @@
           }"
           :data="userData.list"
         >
-          <el-table-column width="55" prop="attrOrder" label="序号" />
-          <el-table-column prop="attrName" label="字段名称" />
-          <el-table-column prop="attrType" label="类型" >
+          <el-table-column align="center" width="55" prop="attrOrder" label="序号" />
+          <el-table-column align="center" prop="attrName" label="字段名称" />
+          <el-table-column align="center" prop="attrType" label="类型" >
             <template slot-scope="scope">
                 {{AttrTypeArr[scope.row.attrType]}}
             </template>
           </el-table-column>
-          <el-table-column prop="isNull" label="必填" >
+          <el-table-column align="center" prop="isNull" label="必填" >
           <template slot-scope="scope">
                 {{scope.row.isNull?'必填':'非必填'}}
             </template>
           </el-table-column>
-          <el-table-column prop="attrField" label="属性类型" >
+          <el-table-column align="center" prop="attrField" label="属性类型" >
             <template slot-scope="scope">
                 {{scope.row.isDefault?'自定义属性':'默认属性'}}
             </template>
@@ -151,19 +151,19 @@
           }"
           :data="deptData.list"
         >
-          <el-table-column width="55" prop="attrOrder" label="序号" />
-          <el-table-column prop="attrName" label="字段名称" />
-          <el-table-column prop="attrType" label="类型" >
+          <el-table-column align="center" width="55" prop="attrOrder" label="序号" />
+          <el-table-column align="center" prop="attrName" label="字段名称" />
+          <el-table-column align="center" prop="attrType" label="类型" >
             <template slot-scope="scope">
                 {{AttrTypeArr[scope.row.attrType]}}
             </template>
           </el-table-column>
-          <el-table-column prop="isNull" label="必填" >
+          <el-table-column align="center" prop="isNull" label="必填" >
             <template slot-scope="scope">
                 {{scope.row.isNull?'必填':'非必填'}}
             </template>
           </el-table-column>
-          <el-table-column prop="attrField" label="属性类型" >
+          <el-table-column align="center" prop="attrField" label="属性类型" >
             <template slot-scope="scope">
                 {{scope.row.isDefault?'自定义属性':'默认属性'}}
             </template>
@@ -264,7 +264,7 @@ export default class extends Vue {
     loading: false
   };
   AttrTypeArr:Array<string> = [
-    ' ','单行文本', '多行文本','手机号','邮箱','超链接','数字','日期','时间','下拉选择','多项选择','开关'
+    '默认属性','单行文本', '多行文本','手机号','邮箱','超链接','数字','日期','时间','下拉选择','多项选择','开关'
   ]
   tagList = {
     inputVisible: false,

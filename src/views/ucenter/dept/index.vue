@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-27 14:28:03
+ * @LastEditTime: 2021-07-28 10:22:14
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -54,7 +54,7 @@
         <el-form-item label="部门名称" prop="deptName">
           <el-input
             v-model="detail.form.deptName"
-            maxlength="10"
+            maxlength="50"
                 style="width:200px"
                 show-word-limit
             placeholder="请输入部门名称"
@@ -91,9 +91,12 @@
       :load="loadMoreList"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column :key="item +index" v-for="(item, index) in tableHeader" :prop="item.attrField" :label="item.attrName" >
+      <el-table-column align="center" :key="item +index" v-for="(item, index) in tableHeader" :prop="item.attrField" :label="item.attrName" >
+        <template slot-scope="scope">
+          <span style="text-align:left" class="column-ctx"> {{scope.row[item.attrField]}}</span>
+        </template>
       </el-table-column>
-      <el-table-column width="100" align="center" label="操作">
+      <el-table-column  width="100" align="center" label="操作">
         <template slot-scope="scope">
           <i @click="editDetail(scope.row)" class="el-icon-edit func-opr" style="cursor: pointer"></i>
           <el-divider direction="vertical"></el-divider>
@@ -135,7 +138,7 @@ export default class extends Vue {
     rules: {
       deptName: [
         { required: true, message: '请输入部门名称', trigger: 'blur' },
-        { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+        { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
       ],
       parentId: { required: true, message: '请选择上级部门', trigger: 'blur' }
     }
@@ -270,5 +273,9 @@ export default class extends Vue {
 <style scoped>
 .el-dialog__body {
   padding-top: 0;
+}
+.column-ctx{
+  display: inline-block;
+  width: 100%;
 }
 </style>
