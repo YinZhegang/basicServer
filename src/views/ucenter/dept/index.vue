@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-28 10:22:14
+ * @LastEditTime: 2021-07-28 11:27:22
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -91,9 +91,9 @@
       :load="loadMoreList"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column align="center" :key="item +index" v-for="(item, index) in tableHeader" :prop="item.attrField" :label="item.attrName" >
+      <el-table-column class-name="column-ctx" align="center" :key="item +index" v-for="(item, index) in tableHeader" :prop="item.attrField" :label="item.attrName" >
         <template slot-scope="scope">
-          <span style="text-align:left" class="column-ctx"> {{scope.row[item.attrField]}}</span>
+          {{scope.row[item.attrField]}}
         </template>
       </el-table-column>
       <el-table-column  width="100" align="center" label="操作">
@@ -275,7 +275,6 @@ export default class extends Vue {
   padding-top: 0;
 }
 .column-ctx{
-  display: inline-block;
-  width: 100%;
+   text-align: left;
 }
 </style>
