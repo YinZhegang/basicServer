@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-28 11:27:22
+ * @LastEditTime: 2021-07-29 14:21:48
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -29,7 +29,16 @@
 }"
       >部门排序</el-button-func
     >
-    <el-dialog  :visible.sync="deptSort.visible" title="部门排序">
+    <el-dialog :before-close="(d) => {
+      if(isMoved) {
+      tableData = [];
+      getDeptTop()
+      isMoved = false
+
+      }
+      d()
+
+      }"  :visible.sync="deptSort.visible" title="部门排序">
       <el-tree
       style="height:500px;overflow:auto"
       :props="{
@@ -67,7 +76,7 @@
           <el-button type="primary" @click="addDataMethod('detailForm')"
           >保存</el-button
         >
-        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="detail.visible = false">取 消</el-button>
         </el-form-item>
 
       </el-form>
@@ -118,6 +127,7 @@ import { attrList } from '@/api/dict'
   }
 })
 export default class extends Vue {
+  isMoved = false
   created() {
     this.getTableHeader()
     this.getDeptTop()
@@ -215,6 +225,7 @@ export default class extends Vue {
       })
       console.log('tree drop: ', dropNode.label, dropType)
     }
+    this.isMoved = true
   }
 
   loadMoreList(tree:any, treeNode:any, resolve:any) {

@@ -98,7 +98,7 @@ export const constantRoutes: RouteConfig[] = [
     redirect: '/center/ucenter/dept',
     meta: {
       title: '企业管理',
-      icon: 'dashboard',
+      icon: 'company-1',
       affix: true
     },
     children: [

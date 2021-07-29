@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-07-21 17:24:23
- * @LastEditTime: 2021-07-26 16:38:09
+ * @LastEditTime: 2021-07-29 11:20:05
  * @LastEditors: yinzhegang
  * @Description: 
  * @FilePath: \basicServes\src\api\dept.ts
@@ -30,7 +30,7 @@ export interface DeptGetParams {
 }
 export const deptGet = (params: DeptGetParams) =>request.post(url.deptGet, params)
 
-export interface DeptListParams extends Params {
+export interface DeptListParams {
     deptId?: number
     detail?: boolean
     fetchChild?: boolean

@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-12 11:41:59
- * @LastEditTime: 2021-07-28 09:49:34
+ * @LastEditTime: 2021-07-29 11:22:07
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\components\ChooseItems\content.vue
@@ -71,7 +71,7 @@ import { groupList } from '@/api/group'
   name: 'ChooseContent'
 })
 export default class extends Vue {
-  @Prop({ default: () => ['dept'] }) type: string[] // dept depts user users group groups
+  @Prop({ default: () => ['dept'] }) type?: string[] // dept depts user users group groups
   @Prop({ default: '' }) searchType = ''
 
    serachKey = '' // 搜索关键词
@@ -81,12 +81,12 @@ export default class extends Vue {
    }
 
    get getChooseComType():string {
-     if (this.type.includes('depts')) return 'el-checkbox-group'
+     if (this.type?.includes('depts')) return 'el-checkbox-group'
      return 'div'
    }
 
    get getChooseItemType():string {
-     if (this.type.includes('depts')) return 'el-checkbox'
+     if (this.type?.includes('depts')) return 'el-checkbox'
      return 'div'
    }
 
@@ -191,7 +191,7 @@ export default class extends Vue {
   display: inline-block;
   width: 100%;
 }
-/deep/.el-checkbox-group .el-checkbox .el-checkbox__label{
+/deep/ .el-checkbox-group .el-checkbox .el-checkbox__label{
   display: inline-block;
   width: calc(100% - 10px);
 }
