@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-29 14:21:48
+ * @LastEditTime: 2021-07-30 11:11:49
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -41,6 +41,7 @@
       }"  :visible.sync="deptSort.visible" title="部门排序">
       <el-tree
       style="height:500px;overflow:auto"
+      v-if="refreshTree"
       :props="{
         label: 'deptName'
       }"
@@ -94,18 +95,18 @@
         borderBottom: '1px solid #d7dbe6'
       }"
       :data="tableData"
-      style="width: 100%; margin-bottom: 20px"
+      style="width: 100%; margin-bottom: 20px;margin-top:-2px"
       row-key="deptId"
       lazy
       :load="loadMoreList"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column class-name="column-ctx" align="center" :key="item +index" v-for="(item, index) in tableHeader" :prop="item.attrField" :label="item.attrName" >
+      <el-table-column :label-class-name="index?'':'first-ctx'" :align="index?'center':'left'" :key="item +index" v-for="(item, index) in tableHeader" :prop="item.attrField" :label="item.attrName" >
         <template slot-scope="scope">
           {{scope.row[item.attrField]}}
         </template>
       </el-table-column>
-      <el-table-column  width="100" align="center" label="操作">
+      <el-table-column   width="100" align="center" label="操作">
         <template slot-scope="scope">
           <i @click="editDetail(scope.row)" class="el-icon-edit func-opr" style="cursor: pointer"></i>
           <el-divider direction="vertical"></el-divider>
@@ -127,6 +128,7 @@ import { attrList } from '@/api/dict'
   }
 })
 export default class extends Vue {
+  refreshTree = true
   isMoved = false
   created() {
     this.getTableHeader()
@@ -238,6 +240,13 @@ export default class extends Vue {
     })
   }
 
+  toFreshTree() {
+    this.refreshTree = false
+    this.$nextTick(() => {
+      this.refreshTree = true
+    })
+  }
+
   getOneDept(dept:any) {
     this.detpVisible = false
     this.detail.form.parent = dept
@@ -252,13 +261,14 @@ export default class extends Vue {
       })
       this.tableData = []
       this.getDeptTop()
+      this.toFreshTree()
     })
   }
 
   async editDetail(row:any) {
     const data = JSON.parse(JSON.stringify(row))
     this.detail.visible = true
-    const deptDt:any = await deptGet({ deptId: data.deptId, detail: true })
+    const deptDt:any = await deptGet({ deptId: data.parentId, detail: true })
     this.detail.form = data
     this.detail.form.parent = deptDt
     this.detail.isEdit = true
@@ -275,6 +285,7 @@ export default class extends Vue {
         this.detail.visible = false
         this.tableData = []
         this.getDeptTop()
+        this.toFreshTree()
       })
     })
   }
@@ -285,7 +296,7 @@ export default class extends Vue {
 .el-dialog__body {
   padding-top: 0;
 }
-.column-ctx{
-   text-align: left;
+>>>.first-ctx{
+   text-align: center;
 }
 </style>

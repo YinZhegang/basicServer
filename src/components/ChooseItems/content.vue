@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-12 11:41:59
- * @LastEditTime: 2021-07-29 11:22:07
+ * @LastEditTime: 2021-07-29 17:56:14
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\components\ChooseItems\content.vue
@@ -10,9 +10,9 @@
 <template>
      <div class="main-content">
           <div class="main-dept" :style="{border: (type.includes('dept')&&type.length ===1)?'none':''}">
-            <el-input  placeholder="请输入内容"
-              prefix-icon="el-icon-search" size="mini" v-model="serachKey"></el-input>
-            <el-breadcrumb style="margin-top:10px;" separator-class="el-icon-arrow-right">
+            <!-- <el-input  placeholder="请输入内容"
+              prefix-icon="el-icon-search" size="mini" v-model="serachKey"></el-input> -->
+            <el-breadcrumb  separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item>
                   <span class="breadcrumb-item-span" @click="loadTopDept">首页</span>
                 </el-breadcrumb-item>
@@ -246,5 +246,8 @@ export default class extends Vue {
 }
 .main-dept-list-item > div>p{
   margin-left: 10px;
+}
+>>>.el-dialog__body{
+   padding-top: 10px;
 }
 </style>

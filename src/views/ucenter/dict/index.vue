@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-28 10:16:52
+ * @LastEditTime: 2021-07-29 17:43:11
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dict\index.vue
@@ -71,14 +71,16 @@
           </el-form-item>
       </el-form>
     </el-dialog>
-    <el-tabs v-model="activeName">
-       
-      <el-tab-pane label="用户字段" name="user">
-        <el-button-func @click="()=>{userData.detail.isEdit = false;userData.detail.form = userData.detail.form = {tenantId:1,form:1,tagList:[]};userData.detail.visible = true}" size="small" style="float: right" icon="el-icon-plus"
+    <div style="position:absolute;right:15px;z-index:1999">
+    <el-button-func  @click="()=>{userData.detail.isEdit = false;userData.detail.form = {tenantId:1,form:2,tagList:[]};userData.detail.visible = true}" size="small" style="float: right" icon="el-icon-plus"
+        >新增部门字段</el-button-func>
+    <el-button-func @click="()=>{userData.detail.isEdit = false;userData.detail.form = userData.detail.form = {tenantId:1,form:1,tagList:[]};userData.detail.visible = true}" size="small" style="float: right;margin:0  5px" icon="el-icon-plus"
         >新增用户字段</el-button-func>
-        <br/>
-        <br/>
-         <br/>
+    </div>
+
+        
+    <el-tabs v-model="activeName" type="card">
+      <el-tab-pane label="用户字段" name="user">
         <el-table
           v-loading="userData.loading"
           border
@@ -134,11 +136,6 @@
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="部门字段" name="dept">
-         <el-button-func @click="()=>{userData.detail.isEdit = false;userData.detail.form = {tenantId:1,form:2,tagList:[]};userData.detail.visible = true}" size="small" style="float: right" icon="el-icon-plus"
-        >新增部门字段</el-button-func>
-        <br/>
-        <br/>
-        <br/>
           <el-table
           v-loading="deptData.loading"
           border
@@ -378,7 +375,7 @@ export default class extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
 el-tag + .el-tag {
     margin-left: 10px;
   }
@@ -393,5 +390,8 @@ el-tag + .el-tag {
     width: 90px;
     margin-left: 10px;
     vertical-align: bottom;
+  }
+  >>>.el-tabs__header{
+     margin-bottom:8px
   }
 </style>

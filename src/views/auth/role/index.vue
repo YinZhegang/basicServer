@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-28 10:08:01
+ * @LastEditTime: 2021-07-29 17:17:51
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\auth\role\index.vue
@@ -115,6 +115,7 @@
               </template>
             </el-table-column>
       </el-table>
+      <br />
       <el-pagination
         style="float: right; overflow: hidden"
         :current-page="roleData.params.current"

@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-06-03 09:57:20
- * @LastEditTime: 2021-07-27 17:17:27
+ * @LastEditTime: 2021-07-30 11:01:37
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\layout\components\AppMain.vue
@@ -45,7 +45,7 @@ export default class extends Vue {
   width: 100%;
   position: relative;
   overflow: hidden;
-  padding: 20px;
+  padding: 10px;
 }
 
 .fixed-header+.app-main {

@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-28 10:10:54
+ * @LastEditTime: 2021-07-29 17:17:05
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\group\index.vue
@@ -125,6 +125,7 @@
         </template>
       </el-table-column>
       </el-table>
+      <br />
       <el-pagination
         style="float: right; overflow: hidden"
         :current-page="groupData.params.current"
