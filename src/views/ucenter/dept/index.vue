@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-30 11:11:49
+ * @LastEditTime: 2021-07-31 12:24:23
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -16,7 +16,7 @@
       icon="el-icon-plus"
       @click="() => {
         detail.isEdit = false;
-        detail.visible = true;detail.form={}
+        detail.visible = true;
 }"
       >新增部门</el-button-func
     >
@@ -53,7 +53,7 @@
     </el-dialog>
     <el-dialog :title="detail.isEdit?'编辑部门':'新增部门'" :visible.sync="detail.visible" width="50%">
       <el-form
-      size="small"
+         size="small"
         :model="detail.form"
         ref="detailForm"
         :rules="detail.rules"
@@ -61,18 +61,18 @@
         style="width:50%;margin:0 auto"
         class="demo-ruleForm"
       >
-        <el-form-item label="部门名称" prop="deptName">
-          <el-input
-            v-model="detail.form.deptName"
-            maxlength="50"
-                style="width:200px"
-                show-word-limit
-            placeholder="请输入部门名称"
-          ></el-input>
+        <el-form-item :key="'deptEDit'+ index" v-for="(item, index) in tableHeader" :label="item.attrName" :prop="item.attrField">
+            <component :is="item.conf.ele" :type="item.conf.type" v-bind="item.conf.props?item.conf.props:{}"  :placeholder="item.conf.placeholder" v-model="detail.form[item.attrField]">
+              <template v-if="item.conf.options&&item.conf.eleChild==='el-option'">
+                <component :key="'itemOption'+ idx" :value="opt.value" v-for="(opt,idx) in item.conf.options" :label="opt.label" :is="item.conf.eleChild">{{opt.value}}</component>
+              </template>
+              <template v-if="item.conf.options&&item.conf.eleChild==='el-checkbox'">
+               <el-checkbox @change="$forceUpdate()" :key="'itemCheckbox'+ idx"  v-for="(opt,idx) in item.conf.options" :label="opt.label">{{opt.value}}</el-checkbox>
+              </template>
+            </component>
+
         </el-form-item>
-        <el-form-item label="上级部门" prop="parentId">
-            <el-button icon="el-icon-edit" type="primary" plain @click="detpVisible = true">{{detail.form.parent?detail.form.parent.deptName:'请选择部门'}}</el-button>
-        </el-form-item>
+
         <el-form-item>
           <el-button type="primary" @click="addDataMethod('detailForm')"
           >保存</el-button
@@ -101,9 +101,9 @@
       :load="loadMoreList"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column :label-class-name="index?'':'first-ctx'" :align="index?'center':'left'" :key="item +index" v-for="(item, index) in tableHeader" :prop="item.attrField" :label="item.attrName" >
+      <el-table-column v-if="headerVisible(item.attrField)" :label-class-name="index?'':'first-ctx'" align="left" :key="item +index" v-for="(item, index) in tableHeader" :prop="item.attrField" :label="item.attrName" >
         <template slot-scope="scope">
-          {{scope.row[item.attrField]}}
+          {{ getDeptFieldName(item.attrField,scope.row[item.attrField]) }}
         </template>
       </el-table-column>
       <el-table-column   width="100" align="center" label="操作">
@@ -121,6 +121,17 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { deptTop, deptList, deptOrder, deptMove, deptDelete, deptGet, deptAdd, deptUpdate } from '@/api/dept'
 import { attrList } from '@/api/dict'
+
+type InputTypeDetail = {
+   ele:'el-input'|'el-input-number'|'el-select'|'el-date-picker'|'el-time-select'|'el-checkbox-group'|'el-switch'
+   props?:object
+   eleChild?:'el-checkbox'|'el-radio'|'el-option'
+   type?:'textarea'|'text'|'date'|'datetime'
+   rule?: object[]|object
+   placeholder?:string
+   options?:{label:string|number, value:string|number}[]
+}
+
 @Component({
   name: 'dept',
   components: {
@@ -154,17 +165,206 @@ export default class extends Vue {
       ],
       parentId: { required: true, message: '请选择上级部门', trigger: 'blur' }
     }
+
   }
 
   tableHeader = []
   getTableHeader() {
     attrList({ current: 1, size: 100, form: 2, tenantId: 1 }).then((res:any) => {
-      this.tableHeader = this.formatHeader(res.records) || []
+      const hd = this.formatHeader(res.records)
+      const rules = {}
+      hd.forEach((e:any) => {
+        rules[e.attrField] = e.conf.rule
+      })
+      this.detail.rules = rules
+      console.log(88, this.detail.form)
+      this.tableHeader = hd || []
+      this.$forceUpdate()
     })
   }
 
+  AttrTypeArr:Array<string> = [
+    '默认属性', '单行文本', '多行文本', '手机号', '邮箱', '超链接', '数字', '日期', '时间', '下拉选择', '多项选择', '开关'
+  ]
+
+  headerVisible(attrField:string) {
+    switch (attrField) {
+      case 'tenantId':
+        return false
+      default:
+        return true
+    }
+  }
+
+  getDeptFieldName(attrField:string, attrValue:any):string {
+    switch (attrField) {
+      case 'status':
+        return attrValue ? (attrValue == 1 ? '停用' : '删除') : '正常'
+      default:
+        return attrValue
+    }
+  }
+
+  getAttrConf(item:any): InputTypeDetail {
+    switch (item.attrType) {
+      case 1:
+        return {
+          ele: 'el-input',
+          type: 'text',
+          placeholder: '请填写' + item.attrName,
+          props: { 'show-word-limit': true, maxlength: 50 },
+          rule: [{ required: !!item.isNull, message: `请输入${item.attrName}`, trigger: 'blur' }, { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }]
+        }
+      case 2:
+        return {
+          ele: 'el-input',
+          type: 'textarea',
+          placeholder: '请填写' + item.attrName,
+          props: { 'show-word-limit': true, maxlength: 200 },
+          rule: [{ required: !!item.isNull, message: `请输入${item.attrName}`, trigger: 'blur' }, { min: 1, max: 200, message: '长度在 1 到 50 个字符', trigger: 'blur' }]
+        }
+      case 3:
+        return {
+          ele: 'el-input',
+          type: 'text',
+          placeholder: '请填写' + item.attrName,
+          rule: [{
+            validator: (rule:any, value:any, callback:any) => {
+              console.log(9900, value, item.isNull)
+              if (!value) {
+                if (item.isNull) {
+                  return callback(new Error(`请输入${item.attrName}`))
+                } else {
+                  return callback()
+                }
+              }
+              if (!/^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(value)) {
+                return callback(new Error('请输入正确手机号'))
+              }
+              return callback()
+            },
+            trigger: 'blur',
+            required: !!item.isNull
+          }]
+        }
+      case 4:
+        return {
+          ele: 'el-input',
+          type: 'text',
+          placeholder: '请填写' + item.attrName,
+          rule: [{
+            validator: (rule:any, value:any, callback:any) => {
+              console.log(9900, value, item.isNull)
+              if (!value) {
+                if (item.isNull) {
+                  return callback(new Error(`请输入${item.attrName}`))
+                } else {
+                  return callback()
+                }
+              }
+              if (!/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(value)) {
+                return callback(new Error('请输入正确的邮箱地址'))
+              }
+              return callback()
+            },
+            trigger: 'blur',
+            required: !!item.isNull
+          }]
+        }
+      case 5:
+        return {
+          ele: 'el-input',
+          type: 'text',
+          placeholder: '请填写' + item.attrName,
+          rule: [{
+            validator: (rule:any, value:any, callback:any) => {
+              console.log(9900, value, item.isNull)
+              if (!value) {
+                if (item.isNull) {
+                  return callback(new Error(`请输入${item.attrName}`))
+                } else {
+                  return callback()
+                }
+              }
+              if (!/^https?:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i.test(value)) {
+                return callback(new Error('请输入正确的链接'))
+              }
+              return callback()
+            },
+            trigger: 'blur',
+            required: !!item.isNull
+          }]
+        }
+      case 6:
+        return {
+          ele: 'el-input',
+          type: 'text',
+          placeholder: '请填写' + item.attrName,
+          rule: [{
+            validator: (rule:any, value:any, callback:any) => {
+              console.log(9900, value, item.isNull)
+              if (!value) {
+                if (item.isNull) {
+                  return callback(new Error(`请输入${item.attrName}`))
+                } else {
+                  return callback()
+                }
+              }
+              if (!/^\d+$/.test(value)) {
+                return callback(new Error('请输入正确的链接'))
+              }
+              return callback()
+            },
+            trigger: 'blur',
+            required: !!item.isNull
+          }]
+        }
+      case 7:
+        return {
+          ele: 'el-date-picker',
+          type: 'date',
+          placeholder: '请填写' + item.attrName,
+          rule: [{ required: !!item.isNull, message: `请输入${item.attrName}`, trigger: 'blur' }]
+        }
+      case 8:
+        return {
+          ele: 'el-time-select',
+          placeholder: '请填写' + item.attrName,
+          rule: [{ required: !!item.isNull, message: `请输入${item.attrName}`, trigger: 'blur' }]
+        }
+      case 9:
+        return {
+          ele: 'el-select',
+          eleChild: 'el-option',
+          options: item?.attrDictListVOList.map((i:any) => ({ label: i.attrValue, value: i.attrValue })),
+          placeholder: '请填写' + item.attrName,
+          rule: [{ required: !!item.isNull, message: `请输入${item.attrName}`, trigger: 'blur' }]
+        }
+      case 10:
+        this.detail.form[item.attrField] = []
+        return {
+          ele: 'el-checkbox-group',
+          eleChild: 'el-checkbox',
+          options: item?.attrDictListVOList.map((i:any) => ({ label: i.attrValue, value: i.attrValue })),
+          placeholder: '请填写' + item.attrName,
+          rule: [{ required: !!item.isNull, message: `请输入${item.attrName}`, trigger: 'blur' }]
+        }
+      case 11:
+        return {
+          ele: 'el-switch',
+          placeholder: '请填写' + item.attrName,
+          props: { activeValue: 0, inactiveValue: 1 },
+          rule: [{ required: !!item.isNull, message: `请输入${item.attrName}`, trigger: 'blur' }]
+        }
+      default:
+        return {
+          ele: 'el-input'
+        }
+    }
+  }
+
   formatHeader(header:any) {
-    return header
+    return header.map((item:any) => ({ ...item, conf: this.getAttrConf(item) }))
   }
 
   getDeptTop() {
@@ -172,6 +372,7 @@ export default class extends Vue {
       this.topDept = res
       console.log(this.formatDeptList([res]))
       this.tableData = this.formatDeptList([res])
+
       // console.log(res)
     })
   }
@@ -296,7 +497,5 @@ export default class extends Vue {
 .el-dialog__body {
   padding-top: 0;
 }
->>>.first-ctx{
-   text-align: center;
-}
+
 </style>

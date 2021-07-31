@@ -340,6 +340,7 @@ export default class extends Vue {
 // Reset element css of el-icon-close
 .tags-view-wrapper {
   .tags-view-item {
+
     .el-icon-close {
       width: 22px;
       height: 22px;

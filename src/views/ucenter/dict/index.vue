@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-29 17:43:11
+ * @LastEditTime: 2021-07-30 16:42:18
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dict\index.vue
@@ -66,7 +66,7 @@
               <el-switch :inactive-value="1" :active-value="0" v-model="userData.detail.form.isListShow"></el-switch>
           </el-form-item>
           <el-form-item>
-              <el-button @click="attrAddMethod(1,'userAddForm')" type="primary">确定</el-button>
+              <el-button @click="attrAddMethod(userData.detail.form.form,'userAddForm')" type="primary">确定</el-button>
               <el-button @click="()=>{$refs.userAddForm.clearValidate();userData.detail.visible = false}">取消</el-button>
           </el-form-item>
       </el-form>
@@ -286,9 +286,9 @@ export default class extends Vue {
     (<any>this.$refs[ref]).validate((valid:boolean) =>{
        if(!valid) return
        attrVerify({form,tenantId:1}).then(res=>{
-         this[form==1?'userData':'deptData'].detail.form.attrField = res.attrField
+         this.userData.detail.form.attrField = res.attrField
          this.userData.detail.form.creator =524
-         
+           console.log( this.userData.detail.form)
          if(this.userData.detail.isEdit){
            this.userData.detail.form.tenantId =1
               attrUpdate(this.userData.detail.form).then(()=>{

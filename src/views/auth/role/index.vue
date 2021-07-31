@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-29 17:17:51
+ * @LastEditTime: 2021-07-30 15:00:58
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\auth\role\index.vue
@@ -63,20 +63,21 @@
           </el-input>
         </el-form-item>
       </el-form>
-
-      <el-button-group>
-        <el-button-func  size="small" @click="() => {
-          roleData.detail.form ={}
-          roleData.detail.isEdit = false
-          roleData.detail.visible = true
-          }" icon="el-icon-plus"
-          >新增人角色</el-button-func
-        >
-         </el-button-group>
-         <el-divider direction="vertical"></el-divider>
+      <div style="float:right">
+          <el-button-group>
+          <el-button-func  size="small" @click="() => {
+            roleData.detail.form ={}
+            roleData.detail.isEdit = false
+            roleData.detail.visible = true
+            }" icon="el-icon-plus"
+            >新增角色</el-button-func
+          >
+          </el-button-group>
+          <el-divider direction="vertical"></el-divider>
         <el-button-func @click="delRoleDatas(roleData.selections)" size="small" icon="el-icon-delete"
-          >删除</el-button-func
-        >
+          >删除</el-button-func>
+      </div>
+
       <!-- 数据列表 -->
       <el-table
         v-loading="roleData.loading"
