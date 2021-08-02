@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-08-02 14:27:15
+ * @LastEditTime: 2021-08-02 15:41:25
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -10,6 +10,20 @@
 <template>
   <div>
     <choose-member @get-one-dept="getOneDept" width="500px" title="选择部门" :visible.sync="detpVisible"></choose-member>
+      <el-popover
+        style="float: right; overflow: hidden; margin-left: 10px;"
+        placement="bottom"
+        title="列表字段展示设置"
+        width="200"
+        trigger="click"
+      >
+        <el-checkbox-group @change="setColumnVisible" v-model="columnVisible">
+          <el-checkbox :key="'columnVisible'+ index" v-for="(i,index) in columnVisibleList" :label="i.attrField">{{i.attrName}}</el-checkbox>
+        </el-checkbox-group>
+        <el-button type="text" slot="reference">
+          <i style="color:#000" class="el-icon-more"></i
+        ></el-button>
+      </el-popover>
     <el-button-func
       size="small"
       style="float: right; cursor: pointer"
@@ -29,6 +43,7 @@
 }"
       >部门排序</el-button-func
     >
+
     <el-dialog :before-close="(d) => {
       if(isMoved) {
       tableData = [];
@@ -103,7 +118,7 @@
       :load="loadMoreList"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column show-overflow-tooltip	v-if="headerVisible(item.attrField)&&!item.isListShow" :label-class-name="index?'':'first-ctx'" align="left" :key="item +index" v-for="(item, index) in tableHeader" :prop="item.attrField" :label="item.attrName" >
+      <el-table-column show-overflow-tooltip v-if="headerVisible(item.attrField)&&!item.isListShow" :label-class-name="index?'':'first-ctx'" align="left" :key="item +index" v-for="(item, index) in tableHeader" :prop="item.attrField" :label="item.attrName" >
         <template slot-scope="scope">
           <div v-if="item.attrType===10">
             <el-tag style="margin:0 1px" :key="'attrType===10' + idx" size='mini' v-for="(tag, idx) in scope.row[item.attrField].split(',').filter(Boolean)">{{tag}}</el-tag>
@@ -151,6 +166,12 @@ export default class extends Vue {
     this.getDeptTop()
   }
 
+  columnVisibleList=[]
+  columnVisible = []
+  setColumnVisible(val:any) {
+    this.tableHeader = this.columnVisibleList.filter((i:any) => val.includes(i.attrField))
+  }
+
   deptSort = {
     visible: false
   }
@@ -189,6 +210,8 @@ export default class extends Vue {
       })
       this.detail.rules = rules
       this.tableHeader = hd || []
+      this.columnVisibleList = JSON.parse(JSON.stringify(this.tableHeader.filter((i:any) => !i.isListShow)))
+      this.columnVisible = this.columnVisibleList.map((i:any) => i.attrField)
       this.$forceUpdate()
     })
   }
@@ -475,14 +498,25 @@ export default class extends Vue {
   }
 
   deptDelete(deptId:number) {
-    deptDelete({ deptId }).then(() => {
-      this.$message({
-        type: 'success',
-        message: '删除成功'
+    this.$confirm('此操作将永久删除该项, 是否继续?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      deptDelete({ deptId }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功'
+        })
+        this.tableData = []
+        this.getDeptTop()
+        this.toFreshTree()
       })
-      this.tableData = []
-      this.getDeptTop()
-      this.toFreshTree()
+    }).catch(() => {
+      this.$message({
+        type: 'info',
+        message: '已取消删除'
+      })
     })
   }
 

@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-29 17:17:05
+ * @LastEditTime: 2021-08-02 15:40:38
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\group\index.vue
@@ -184,12 +184,23 @@ export default class extends Vue {
   }
 
   groupDelete(row:any) {
-    (this.groupData.deleteData as Function)({ ...row, tenantId: 183, creator: 1 }).then((res:any) => {
-      this.$message({
-        type: 'success',
-        message: '删除成功'
+    this.$confirm('此操作将永久删除该项, 是否继续?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      (this.groupData.deleteData as Function)({ ...row, tenantId: 183, creator: 1 }).then((res:any) => {
+        this.$message({
+          type: 'success',
+          message: '删除成功'
+        })
+        this.getList()
       })
-      this.getList()
+    }).catch(() => {
+      this.$message({
+        type: 'info',
+        message: '已取消删除'
+      })
     })
   }
 

@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-08-02 14:04:44
+ * @LastEditTime: 2021-08-02 15:39:35
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dict\index.vue
@@ -33,8 +33,8 @@
                 closable
                 style="margin:1px"
                 :disable-transitions="false"
-                @close="(tag)=>{
-                  userData.detail.form.tagList.splice(userData.detail.form.tagList.indexOf(tag), 1);
+                @close="()=>{
+                  userData.detail.form.tagList.splice(userData.detail.form.tagList.findIndex((ii)=>tag.attrValue==ii.attrValue), 1);
                   if(userData.detail.isEdit){
                       if(tag.id) {
                         if(userData.detail.form.deleteDictList){
@@ -43,7 +43,9 @@
                             userData.detail.form.deleteDictList =[tag.id]
                         } 
                       } 
+                    
                   }
+                    $forceUpdate()
                   }">
                 {{tag.attrValue}}
               </el-tag>
@@ -203,6 +205,7 @@ import { ListData } from '../../../types/page'
   name: 'dict'
 })
 export default class extends Vue {
+  window = window
   activeName: 'user' | 'dept' = 'user';
   disabledIcon={
      color:'#f4f4f5'
@@ -335,13 +338,25 @@ export default class extends Vue {
         });
   }
   deleteData(row:any){
-    attrDelete({...row,tenantId:1}).then(()=>{
-      this.$message({
-        type:'success',
-        message:'删除成功'
-      })
-      this.refreshData(row.form)
-    })
+     this.$confirm('此操作将永久删除该项, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+         attrDelete({...row,tenantId:1}).then(()=>{
+            this.$message({
+              type:'success',
+              message:'删除成功'
+            })
+            this.refreshData(row.form)
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+    
    
   }
    handleInputConfirm(){

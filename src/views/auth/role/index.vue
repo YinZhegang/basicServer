@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-30 15:00:58
+ * @LastEditTime: 2021-08-02 15:42:30
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\auth\role\index.vue
@@ -227,12 +227,23 @@ export default class extends Vue {
       })
       return
     }
-    roleDeletebatch({ roleIds: rows.map((i:any) => i.roleId) }).then(() => {
-      this.$message({
-        type: 'success',
-        message: '删除成功'
+    this.$confirm('此操作将永久删除该项, 是否继续?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      roleDeletebatch({ roleIds: rows.map((i:any) => i.roleId) }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功'
+        })
+        this.getList()
       })
-      this.getList()
+    }).catch(() => {
+      this.$message({
+        type: 'info',
+        message: '已取消删除'
+      })
     })
   }
 }
