@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-08-02 14:22:08
+ * @LastEditTime: 2021-08-02 14:27:15
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -105,7 +105,10 @@
     >
       <el-table-column show-overflow-tooltip	v-if="headerVisible(item.attrField)&&!item.isListShow" :label-class-name="index?'':'first-ctx'" align="left" :key="item +index" v-for="(item, index) in tableHeader" :prop="item.attrField" :label="item.attrName" >
         <template slot-scope="scope">
-          {{ getDeptFieldName(item.attrField,scope.row[item.attrField]) }}
+          <div v-if="item.attrType===10">
+            <el-tag style="margin:0 1px" :key="'attrType===10' + idx" size='mini' v-for="(tag, idx) in scope.row[item.attrField].split(',').filter(Boolean)">{{tag}}</el-tag>
+          </div>
+          <span v-else> {{ getDeptFieldName(item.attrField,scope.row[item.attrField]) }}</span>
         </template>
       </el-table-column>
       <el-table-column  width="100" align="center" label="操作">
