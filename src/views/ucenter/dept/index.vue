@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-31 12:24:23
+ * @LastEditTime: 2021-08-02 13:44:15
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -57,14 +57,14 @@
         :model="detail.form"
         ref="detailForm"
         :rules="detail.rules"
-        label-width="80px"
+        label-width="120px"
         style="width:50%;margin:0 auto"
         class="demo-ruleForm"
       >
-        <el-form-item :key="'deptEDit'+ index" v-for="(item, index) in tableHeader" :label="item.attrName" :prop="item.attrField">
+        <el-form-item :key="'deptEDit'+ index" v-for="(item, index) in deptEditAttrList" :label="item.attrName" :prop="item.attrField">
             <component :is="item.conf.ele" :type="item.conf.type" v-bind="item.conf.props?item.conf.props:{}"  :placeholder="item.conf.placeholder" v-model="detail.form[item.attrField]">
               <template v-if="item.conf.options&&item.conf.eleChild==='el-option'">
-                <component :key="'itemOption'+ idx" :value="opt.value" v-for="(opt,idx) in item.conf.options" :label="opt.label" :is="item.conf.eleChild">{{opt.value}}</component>
+                <el-option :key="'itemOption'+ idx" :value="opt.value" v-for="(opt,idx) in item.conf.options" :label="opt.label" :is="item.conf.eleChild"></el-option>
               </template>
               <template v-if="item.conf.options&&item.conf.eleChild==='el-checkbox'">
                <el-checkbox @change="$forceUpdate()" :key="'itemCheckbox'+ idx"  v-for="(opt,idx) in item.conf.options" :label="opt.label">{{opt.value}}</el-checkbox>
@@ -72,7 +72,9 @@
             </component>
 
         </el-form-item>
-
+        <el-form-item label="上级部门" prop="parentId">
+            <el-button icon="el-icon-edit" type="primary" plain @click="detpVisible = true">{{detail.form.parent?detail.form.parent.deptName:'请选择部门'}}</el-button>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="addDataMethod('detailForm')"
           >保存</el-button
@@ -169,6 +171,12 @@ export default class extends Vue {
   }
 
   tableHeader = []
+  get deptEditAttrList() {
+    return this.tableHeader?.filter((i:any) => {
+      return i.attrField !== 'deptOrder'
+    })
+  }
+
   getTableHeader() {
     attrList({ current: 1, size: 100, form: 2, tenantId: 1 }).then((res:any) => {
       const hd = this.formatHeader(res.records)
@@ -177,7 +185,6 @@ export default class extends Vue {
         rules[e.attrField] = e.conf.rule
       })
       this.detail.rules = rules
-      console.log(88, this.detail.form)
       this.tableHeader = hd || []
       this.$forceUpdate()
     })
@@ -206,6 +213,15 @@ export default class extends Vue {
   }
 
   getAttrConf(item:any): InputTypeDetail {
+    if (item.attrField === 'status') {
+      return {
+        ele: 'el-select',
+        eleChild: 'el-option',
+        options: [{ label: '正常', value: 0 }, { label: '停用', value: 1 }, { label: '删除', value: 2 }],
+        placeholder: '请填写' + item.attrName,
+        rule: [{ required: !!item.isNull, message: `请输入${item.attrName}`, trigger: 'blur' }]
+      }
+    }
     switch (item.attrType) {
       case 1:
         return {
@@ -323,12 +339,14 @@ export default class extends Vue {
         return {
           ele: 'el-date-picker',
           type: 'date',
+          props: { 'value-format': 'yyyy-MM-dd' },
           placeholder: '请填写' + item.attrName,
           rule: [{ required: !!item.isNull, message: `请输入${item.attrName}`, trigger: 'blur' }]
         }
       case 8:
         return {
           ele: 'el-time-select',
+          props: { 'value-format': 'HH:mm:ss' },
           placeholder: '请填写' + item.attrName,
           rule: [{ required: !!item.isNull, message: `请输入${item.attrName}`, trigger: 'blur' }]
         }
@@ -372,7 +390,6 @@ export default class extends Vue {
       this.topDept = res
       console.log(this.formatDeptList([res]))
       this.tableData = this.formatDeptList([res])
-
       // console.log(res)
     })
   }
@@ -467,18 +484,31 @@ export default class extends Vue {
   }
 
   async editDetail(row:any) {
+    console.log(row)
+    const deptDt:any = await deptGet({ deptId: row.parentId, detail: true })
     const data = JSON.parse(JSON.stringify(row))
-    this.detail.visible = true
-    const deptDt:any = await deptGet({ deptId: data.parentId, detail: true })
+    Object.keys(row).forEach((k:string) => {
+      const item:any = this.tableHeader.find((item:any) => item.attrField === k)
+      if (item && item.attrType === 10) {
+        data[item.attrField] = data[item.attrField]?.split(',')
+      }
+    })
+    console.log(data)
     this.detail.form = data
     this.detail.form.parent = deptDt
+    this.detail.visible = true
     this.detail.isEdit = true
   }
 
   addDataMethod(ref:string) {
     (this.$refs[ref] as any).validate((valid:boolean) => {
       if (!valid) return
-      this[this.detail.isEdit ? 'updateData' : 'addData'](this.detail.form).then(() => {
+      const addData: {
+        [propName:string]: any
+      } = {}
+      Object.keys(this.detail.form).forEach((k:string) => { addData[k] = (this.detail.form as any)[k].toString() })
+      console.log(addData)
+      this[this.detail.isEdit ? 'updateData' : 'addData'](addData).then(() => {
         this.$message({
           type: 'success',
           message: this.detail.isEdit ? '修改成功' : '添加成功'
