@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-08-02 13:58:11
+ * @LastEditTime: 2021-08-02 14:22:08
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -103,7 +103,7 @@
       :load="loadMoreList"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column v-if="headerVisible(item.attrField)" :label-class-name="index?'':'first-ctx'" align="left" :key="item +index" v-for="(item, index) in tableHeader" :prop="item.attrField" :label="item.attrName" >
+      <el-table-column show-overflow-tooltip	v-if="headerVisible(item.attrField)&&!item.isListShow" :label-class-name="index?'':'first-ctx'" align="left" :key="item +index" v-for="(item, index) in tableHeader" :prop="item.attrField" :label="item.attrName" >
         <template slot-scope="scope">
           {{ getDeptFieldName(item.attrField,scope.row[item.attrField]) }}
         </template>
