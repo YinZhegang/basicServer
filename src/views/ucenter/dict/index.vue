@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-08-02 13:51:01
+ * @LastEditTime: 2021-08-02 14:04:44
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dict\index.vue
@@ -23,7 +23,7 @@
           </el-form-item>
            <el-form-item prop="attrType" label="字段类型">
               <el-select :disabled="userData.detail.isEdit" v-model="userData.detail.form.attrType" placeholder="请选择字段类型">
-                  <el-option :key="'userData.detail.form.attrType'+ i" v-for="(i,index) in AttrTypeArr.slice(1)" :label="i" :value="index"></el-option>
+                  <el-option :key="'userData.detail.form.attrType'+ i" v-for="(i,index) in AttrTypeArr.slice(1)" :label="i" :value="index+1"></el-option>
               </el-select>
           </el-form-item>
           <el-form-item  v-if="userData.detail.form.attrType==9||userData.detail.form.attrType==10" prop="tagList" label="选项">
@@ -53,6 +53,7 @@
                   v-model="tagList.inputValue"
                   ref="saveTagInput"
                   size="small"
+                   maxlength="10"
                   @keyup.enter.native="handleInputConfirm"
                   @blur="handleInputConfirm"
                 />
@@ -345,6 +346,13 @@ export default class extends Vue {
   }
    handleInputConfirm(){
         let inputValue = this.tagList.inputValue;
+        if(inputValue&&inputValue.length>10){
+          this.$message({
+            type:'warning',
+            message:'请填写10字内选项'
+          })
+          return
+        }
         if((this.userData.detail as any).form.tagList.find((i:any)=>i.attrValue == inputValue)) {
             this.tagList.inputVisible = false;
             this.tagList.inputValue = '';

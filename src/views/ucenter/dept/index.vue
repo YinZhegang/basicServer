@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-08-02 13:52:21
+ * @LastEditTime: 2021-08-02 13:58:11
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -506,7 +506,11 @@ export default class extends Vue {
       const addData: {
         [propName:string]: any
       } = {}
-      Object.keys(this.detail.form).forEach((k:string) => { addData[k] = (this.detail.form as any)[k].toString() })
+      console.log(this.detail.form)
+      Object.keys(this.detail.form).forEach((k:string) => {
+        const d = (this.detail.form as any)[k]
+        addData[k] = Array.isArray(d) ? d.filter(Boolean).toString() : d.toString()
+      })
       console.log(addData)
       this[this.detail.isEdit ? 'updateData' : 'addData'](addData).then(() => {
         this.$message({
