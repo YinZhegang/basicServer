@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-08-02 13:44:15
+ * @LastEditTime: 2021-08-02 13:52:21
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dept\index.vue
@@ -108,7 +108,7 @@
           {{ getDeptFieldName(item.attrField,scope.row[item.attrField]) }}
         </template>
       </el-table-column>
-      <el-table-column   width="100" align="center" label="操作">
+      <el-table-column  width="100" align="center" label="操作">
         <template slot-scope="scope">
           <i @click="editDetail(scope.row)" class="el-icon-edit func-opr" style="cursor: pointer"></i>
           <el-divider direction="vertical"></el-divider>

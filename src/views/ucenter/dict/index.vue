@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-07-06 23:54:52
- * @LastEditTime: 2021-07-30 16:42:18
+ * @LastEditTime: 2021-08-02 13:51:01
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\src\views\ucenter\dict\index.vue
@@ -23,7 +23,7 @@
           </el-form-item>
            <el-form-item prop="attrType" label="字段类型">
               <el-select :disabled="userData.detail.isEdit" v-model="userData.detail.form.attrType" placeholder="请选择字段类型">
-                  <el-option :key="'userData.detail.form.attrType'+ i" v-for="(i,index) in AttrTypeArr" :label="i" :value="index"></el-option>
+                  <el-option :key="'userData.detail.form.attrType'+ i" v-for="(i,index) in AttrTypeArr.slice(1)" :label="i" :value="index"></el-option>
               </el-select>
           </el-form-item>
           <el-form-item  v-if="userData.detail.form.attrType==9||userData.detail.form.attrType==10" prop="tagList" label="选项">
@@ -34,7 +34,6 @@
                 style="margin:1px"
                 :disable-transitions="false"
                 @close="(tag)=>{
-
                   userData.detail.form.tagList.splice(userData.detail.form.tagList.indexOf(tag), 1);
                   if(userData.detail.isEdit){
                       if(tag.id) {
@@ -72,9 +71,9 @@
       </el-form>
     </el-dialog>
     <div style="position:absolute;right:15px;z-index:1999">
-    <el-button-func  @click="()=>{userData.detail.isEdit = false;userData.detail.form = {tenantId:1,form:2,tagList:[]};userData.detail.visible = true}" size="small" style="float: right" icon="el-icon-plus"
+    <el-button-func v-if="activeName=='dept'"  @click="()=>{userData.detail.isEdit = false;userData.detail.form = {tenantId:1,form:2,tagList:[],isNull:0,isListShow:1};userData.detail.visible = true}" size="small" style="float: right" icon="el-icon-plus"
         >新增部门字段</el-button-func>
-    <el-button-func @click="()=>{userData.detail.isEdit = false;userData.detail.form = userData.detail.form = {tenantId:1,form:1,tagList:[]};userData.detail.visible = true}" size="small" style="float: right;margin:0  5px" icon="el-icon-plus"
+    <el-button-func v-else @click="()=>{userData.detail.isEdit = false;userData.detail.form = userData.detail.form = {tenantId:1,form:1,tagList:[],isNull:0,isListShow:1};userData.detail.visible = true}" size="small" style="float: right;" icon="el-icon-plus"
         >新增用户字段</el-button-func>
     </div>
 
