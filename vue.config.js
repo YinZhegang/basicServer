@@ -11,6 +11,7 @@ const name = 'Vue Typescript Admin' // TODO: get this variable from setting.ts
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production' ? './' : './',
   lintOnSave: process.env.NODE_ENV === 'development',
+  outputDir: 'build/public/build',
   productionSourceMap: false,
   devServer: {
     port: devServerPort,

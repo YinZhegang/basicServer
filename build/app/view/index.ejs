@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-08-03 16:36:19
- * @LastEditTime: 2021-08-05 10:03:26
+ * @LastEditTime: 2021-08-05 11:44:49
  * @LastEditors: yinzhegang
  * @Description: 
  * @FilePath: \basicServes\build\app\view\index.ejs
@@ -13,13 +13,31 @@
 		<meta charset="utf-8">
 		<title></title>
 		<meta name="keywords" content=""  />
+		<script src="https://lib.baomitu.com/jquery/3.6.0/jquery.js"></script>
+
 	</head>
 	<style>
 	
 	</style>
 	<body>
-		<button onclick="">打包</button>
+		<button id="build">打包</button>
+		<ul>
+		<% tag.forEach(function(user){ %>
+			<li><%=user %> <button>打包</button></li>
+		  <% }); %>
+		</ul>
+		<ul>
+			<% list.forEach(function(item){ %>
+				<li><%=item.moduleName %> <button>打包</button></li>
+			  <% }); %>
+			</ul>
+		
 	</body>
 </html>
 <script>
+	document.getElementById('build').onclick =function(){
+		$.post("/build",function(data,status){
+         console.log(data,status)
+    });
+	}
 </script>

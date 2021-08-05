@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-08-03 16:38:19
- * @LastEditTime: 2021-08-03 16:47:53
+ * @LastEditTime: 2021-08-05 11:35:10
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\build\app\routes\index.js
@@ -10,8 +10,9 @@
 const router = require('koa-router')()
 
 const Index = require('../controller/index')
+const Build = require('../controller/build')
 
-router.get('/', Index)
+router.get('/', Index).post('/build', Build)
 
 router.get('/json', async(ctx, next) => {
   ctx.body = {
