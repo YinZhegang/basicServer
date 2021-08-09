@@ -2,12 +2,16 @@
     "version": "1.0.0",
     "modules":[
         {
-            "moduleName": "ailink",
-            "ip":"172.1782"
+            "name": "ailink2w",
+            "version":"1.0.0",
+            "desc":"测试版本",
+            "ip":[
+                {"baseIp":"172.16.19"}
+            ]
         },
         {
-            "moduleName": "ailink2",
-            "ip":"172.1782"
+            "name": "ailink2",
+            "ip":[ {"baseIp":"172.16.19"}]
         }
     ]
 }

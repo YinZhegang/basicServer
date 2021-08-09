@@ -1,7 +1,7 @@
 <!--
  * @Author: yinzhegang
  * @Date: 2021-08-03 16:36:19
- * @LastEditTime: 2021-08-05 11:44:49
+ * @LastEditTime: 2021-08-06 14:35:09
  * @LastEditors: yinzhegang
  * @Description: 
  * @FilePath: \basicServes\build\app\view\index.ejs
@@ -21,6 +21,7 @@
 	</style>
 	<body>
 		<button id="build">打包</button>
+		<a href="/packages/build.zip">下载</a>
 		<ul>
 		<% tag.forEach(function(user){ %>
 			<li><%=user %> <button>打包</button></li>
@@ -28,16 +29,20 @@
 		</ul>
 		<ul>
 			<% list.forEach(function(item){ %>
-				<li><%=item.moduleName %> <button>打包</button></li>
+				<li><%=item.name %> <button>打包</button></li>
 			  <% }); %>
 			</ul>
 		
 	</body>
 </html>
 <script>
+		$.post("/getBuildJson",function(data,status){
+         console.log(data,status)
+        });
 	document.getElementById('build').onclick =function(){
 		$.post("/build",function(data,status){
          console.log(data,status)
-    });
+        });
+	
 	}
 </script>

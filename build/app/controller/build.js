@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-08-05 11:34:25
- * @LastEditTime: 2021-08-05 14:04:12
+ * @LastEditTime: 2021-08-06 10:22:09
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\build\app\controller\build.js
@@ -9,6 +9,8 @@
  */
 const path = require('path')
 const shell = require('shelljs')
+const async = require('async')
+
 const zipper = require('zip-local')
 
 module.exports = async(ctx, next) => {
@@ -26,7 +28,7 @@ module.exports = async(ctx, next) => {
     })
   })
   const res = await slees
-  zipper.sync.zip('/Users/xxx/xx/xx').compress().save('/Users/xxx/xx/xx.zip')
+  zipper.sync.zip(path.join(__dirname, '../../public/build/')).compress().save(path.join(__dirname, '../../public/packages/build.zip'))
   ctx.body = 200
   next()
 }

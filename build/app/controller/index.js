@@ -1,7 +1,7 @@
 /*
  * @Author: yinzhegang
  * @Date: 2021-08-03 16:37:27
- * @LastEditTime: 2021-08-05 12:34:09
+ * @LastEditTime: 2021-08-06 14:12:00
  * @LastEditors: yinzhegang
  * @Description:
  * @FilePath: \basicServes\build\app\controller\index.js
@@ -44,7 +44,7 @@ module.exports = async(ctx, next) => {
 
   //     })
   //   })
-
+  console.log(json)
   await ctx.render('view/index', {
     title: 123,
     tag: kk,
